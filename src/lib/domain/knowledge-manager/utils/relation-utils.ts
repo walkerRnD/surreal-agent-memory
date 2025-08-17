@@ -1,26 +1,5 @@
-import type { Relation, RelationInput } from '../types/relation.type';
-
-// Utility function to convert legacy relation format to SurrealDB format
-export function convertLegacyRelation(legacyRelation: RelationInput): Omit<Relation, 'id' | 'created_at'> {
-  return {
-    in: `entity:⟨${legacyRelation.from}⟩`,
-    out: `entity:⟨${legacyRelation.to}⟩`,
-    relationType: legacyRelation.relationType,
-  };
-}
-
-// Utility function to convert SurrealDB relation back to legacy format
-export function convertToLegacyRelation(surrealRelation: Relation): RelationInput {
-  // Extract entity names from SurrealDB record IDs
-  const fromMatch = surrealRelation.in.match(/entity:⟨(.+)⟩/) || surrealRelation.in.match(/entity:(.+)/);
-  const toMatch = surrealRelation.out.match(/entity:⟨(.+)⟩/) || surrealRelation.out.match(/entity:(.+)/);
-
-  return {
-    from: fromMatch ? fromMatch[1] : surrealRelation.in,
-    to: toMatch ? toMatch[1] : surrealRelation.out,
-    relationType: surrealRelation.relationType,
-  };
-}
+import type { RelationEntity, Relation } from '../types/relation.type';
+import type { RelationV0 } from '../managers/manager-v0';
 
 // Utility function to create entity record ID
 export function createEntityId(name: string): string {
@@ -31,4 +10,17 @@ export function createEntityId(name: string): string {
 export function extractEntityName(recordId: string): string {
   const match = recordId.match(/entity:⟨(.+)⟩/) || recordId.match(/entity:(.+)/);
   return match ? match[1] : recordId;
+}
+
+// Utility function to convert RelationEntity or Relation to legacy RelationV0 format
+export function convertToLegacyRelation(relation: RelationEntity | Relation): RelationV0 {
+  // Extract entity names from RecordId objects or string IDs
+  const fromName = relation.in ? extractEntityName(relation.in.toString()) : '';
+  const toName = relation.out ? extractEntityName(relation.out.toString()) : '';
+
+  return {
+    from: fromName,
+    to: toName,
+    relationType: relation.relationType,
+  };
 }

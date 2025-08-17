@@ -4,8 +4,8 @@ import { z } from 'zod';
 // DB Entity Schema - For database layer with SurrealDB RecordId
 export const RelationEntitySchema = z.object({
   id: z.instanceof(RecordId<'relation'>).optional(),
-  in: z.string().min(1, "Relation 'in' field cannot be empty"), // SurrealDB uses 'in' for source
-  out: z.string().min(1, "Relation 'out' field cannot be empty"), // SurrealDB uses 'out' for target
+  in: z.instanceof(RecordId<'entity_node'>).optional(), // SurrealDB uses 'in' for source
+  out: z.instanceof(RecordId<'entity_node'>).optional(), // SurrealDB uses 'out' for target
   relationType: z.string().min(1, "Relation type cannot be empty"),
   metadata: z.record(z.any()).optional(), // Additional relation properties
   created_at: z.date().optional(),
