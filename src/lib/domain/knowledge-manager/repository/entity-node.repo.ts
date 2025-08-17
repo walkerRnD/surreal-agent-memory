@@ -86,4 +86,16 @@ export class EntityNodeRepo {
       return [];
     }
   }
+
+  async findByNames(names: string[]): Promise<EntityNodeEntity[]> {
+    try {
+      const [entities] = await this.db.query<[EntityNodeEntity[]]>(/* surql */`
+        SELECT * FROM entity_node WHERE name IN $names
+      `, { names });
+      return entities || [];
+    } catch (error) {
+      console.error(`Failed to find entities by names:`, error);
+      return [];
+    }
+  }
 }

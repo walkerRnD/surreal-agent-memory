@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { knowledgeGraphManager } from '../../../lib/domain/knowledge-manager/managers/index';
+import { knowledgeGraphManager, clearGraph } from '../../../lib/domain/knowledge-manager/managers/index';
 import { getDb } from '../../../lib/server/infra/db';
 
 export const GET: RequestHandler = async () => {
@@ -110,14 +110,12 @@ export const POST: RequestHandler = async ({ request }) => {
     const { action } = await request.json();
 
     if (action === 'clear') {
-      const db = await getDb();
-
-      await db.query('DELETE entity');
-      await db.query('DELETE knows');
+      const result = await clearGraph();
 
       return json({
         success: true,
-        message: 'SurrealDB data cleared successfully'
+        message: `Knowledge graph cleared successfully! Deleted ${result.deletedEntities} entities and ${result.deletedRelations} relations.`,
+        data: result
       });
     }
 

@@ -170,6 +170,27 @@ class KnowledgeGraphManagerV0 {
 
     return filteredGraph;
   }
+
+  async clearGraph(): Promise<{ deletedEntities: number; deletedRelations: number }> {
+    try {
+      const graph = await this.loadGraph();
+      const entityCount = graph.entities.length;
+      const relationCount = graph.relations.length;
+
+      // Clear the graph by saving an empty one
+      await this.saveGraph({ entities: [], relations: [] });
+
+      console.log(`Cleared ${entityCount} entities and ${relationCount} relations from the knowledge graph`);
+
+      return {
+        deletedEntities: entityCount,
+        deletedRelations: relationCount,
+      };
+    } catch (error) {
+      console.error('Failed to clear graph:', error);
+      throw error;
+    }
+  }
 }
 
 export const knowledgeGraphManager = new KnowledgeGraphManagerV0();

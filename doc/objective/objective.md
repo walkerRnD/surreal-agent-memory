@@ -70,3 +70,36 @@ build modes in package.json
 - build:local # official website (node adapter)
 - build:server # build MPC server with UI
 - build:cli # build CLI
+- build:electron
+
+
+MCP modes
+- [x] Direct Memory Management <--Currently Here
+- [ ] Memory Manager Agent MCP
+- [ ] Workspace Librarian Agent 
+- [ ] Aggregator
+
+
+Retreaval Archtecture
+- [ ] simple RAG
+- [ ] graph RAG
+- [ ] hyper graph RAG
+- [ ] lazy graph Rag
+
+
+Agent Memory Architecture
+- [ ] Reflection
+Studying...
+
+
+Feature
+Codebase indexing
+
+
+Objective
+- easy to use (local, cloud, edge)
+- flexible
+- bench/spec oriented
+- test latest memory/rag architecture from papers
+- multi platform
+- UI integrated

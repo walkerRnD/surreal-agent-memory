@@ -1,11 +1,11 @@
 import { getDb } from '../../../server/infra/db';
 import { EntityNodeRepo } from '../repository/entity-node.repo';
 import { RelationRepo } from '../repository/relation.repo';
-import { EntityDeletionSchema, EntityNodeInputSchema, EntityNodeSchema, type EntityInput } from '../types/entity-node.type';
+import { EntityDeletionSchema, EntityNodeInputSchema, type EntityInput } from '../types/entity-node.type';
 import { type ObservationInput, ObservationInputSchema, ObservationDeletionSchema } from '../types/observation.type';
 import { SearchQuerySchema, NodeNamesSchema } from '../types/query.type';
-import { RelationDeletionSchema, RelationInputSchema, RelationSchema, type RelationInput } from '../types/relation.type';
-import { createEntityId, convertToLegacyRelation } from '../utils/relation-utils';
+import { RelationDeletionSchema, RelationInputSchema, type RelationInput } from '../types/relation.type';
+import { convertToLegacyRelation } from '../utils/relation-utils';
 
 // Import legacy types for backward compatibility
 import type { KnowledgeGraphV0 } from './manager-v0';
@@ -302,51 +302,70 @@ class KnowledgeGraphManagerV1 {
   }
 
   async openNodes(names: string[]): Promise<KnowledgeGraphV0> {
-    const db = await getDb();
-
-    // Validate input with Zod
     const validatedNames = NodeNamesSchema.parse(names);
+    const db = await getDb();
+    const entityRepo = new EntityNodeRepo(db);
+    const relationRepo = new RelationRepo(db);
 
     try {
-      // Get specific entities by name
-      const entityIds = validatedNames.map(name => createEntityId(name));
-
-      const entitiesResult = await db.query(`
-        SELECT * FROM entity WHERE id IN $entityIds
-      `, { entityIds });
-
-      const entities = entitiesResult || [];
+      // Get specific entities by name using repository method
+      const entities = await entityRepo.findByNames(validatedNames);
 
       if (entities.length === 0) {
         return { entities: [], relations: [] };
       }
 
-      // Get relations between the specified entities
-      const relationsResult = await db.query(`
-        SELECT * FROM knows
-        WHERE in IN $entityIds AND out IN $entityIds
-      `, { entityIds });
+      // Get entity IDs for relation filtering
+      const entityIds = entities.map(e => e.id).filter(id => id !== undefined);
 
-      const relations = relationsResult || [];
-
-      // Validate and transform the data
-      const validatedEntities = entities.map(e => EntityNodeSchema.parse(e));
-      const validatedRelations = relations.map(r => RelationSchema.parse(r));
+      // Get relations between the specified entities using repository method
+      const relations = await relationRepo.findByEntities(entityIds);
 
       // Convert to legacy format for backward compatibility
-      const legacyGraph = {
-        entities: validatedEntities.map(e => ({
+      const legacyGraph: KnowledgeGraphV0 = {
+        entities: entities.map(e => ({
           name: e.name,
           entityType: e.entityType,
           observations: e.observations,
         })),
-        relations: validatedRelations.map(r => convertToLegacyRelation(r)),
+        relations: relations.map(r => convertToLegacyRelation(r)),
       };
 
       return legacyGraph;
     } catch (error) {
       console.error('Failed to open nodes:', error);
       return { entities: [], relations: [] };
+    }
+  }
+
+  async clearGraph(): Promise<{ deletedEntities: number; deletedRelations: number }> {
+    const db = await getDb();
+    const entityRepo = new EntityNodeRepo(db);
+    const relationRepo = new RelationRepo(db);
+
+    try {
+      // Get counts before deletion for reporting
+      const entities = await entityRepo.findAll();
+      const relations = await relationRepo.findAll();
+
+      const entityCount = entities.length;
+      const relationCount = relations.length;
+
+      // Clear all relations first
+      await db.query('DELETE relation');
+
+      // Clear all entities
+      await db.query('DELETE entity_node');
+
+      console.log(`Cleared ${entityCount} entities and ${relationCount} relations from the knowledge graph`);
+
+      return {
+        deletedEntities: entityCount,
+        deletedRelations: relationCount,
+      };
+    } catch (error) {
+      console.error('Failed to clear graph:', error);
+      throw error;
     }
   }
 }

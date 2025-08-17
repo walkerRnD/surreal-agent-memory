@@ -128,3 +128,17 @@ export async function healthCheck(): Promise<{ version: string; status: 'healthy
     };
   }
 }
+
+// Clear database utility function
+export async function clearGraph(): Promise<{ deletedEntities: number; deletedRelations: number }> {
+  console.log('Clearing knowledge graph...');
+
+  try {
+    const result = await knowledgeGraphManager.clearGraph();
+    console.log(`Successfully cleared ${result.deletedEntities} entities and ${result.deletedRelations} relations`);
+    return result;
+  } catch (error) {
+    console.error('Failed to clear graph:', error);
+    throw error;
+  }
+}
