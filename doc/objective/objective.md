@@ -64,3 +64,8 @@ npx surreal-agent-memory --config ./config.json
 
 WEB UI
 - cytoscape
+
+build modes in package.json
+- build # official website 
+- build:server # build MPC server with UI
+- build:cli # build CLI
