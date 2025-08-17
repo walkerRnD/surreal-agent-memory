@@ -1,11 +1,15 @@
 {
   "cSpell.words": [
+    "Cytoscape",
     "inlang",
     "mdsvex",
+    "Milvus",
     "modelcontextprotocol",
     "paraglide",
+    "Qdrant",
     "streamable",
     "surql",
-    "surrealdb"
+    "surrealdb",
+    "surrealkv"
   ]
 }

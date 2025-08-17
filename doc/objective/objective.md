@@ -63,7 +63,7 @@ npx surreal-agent-memory --config ./config.json
 ```
 
 WEB UI
-- cytoscape
+- Cytoscape
 
 build modes in package.json
 - build # official website (vercel adapter)
@@ -80,7 +80,8 @@ MCP modes
 - [ ] Aggregator
 
 
-Retreaval Archtecture
+Retrieval Architecture
+- [x] Raw Read and Write  <--Currently Here
 - [ ] simple RAG
 - [ ] graph RAG
 - [ ] hyper graph RAG
@@ -103,3 +104,9 @@ Objective
 - test latest memory/rag architecture from papers
 - multi platform
 - UI integrated
+
+
+DBs
+- [x] Surreal DB  <--Currently Here
+- [ ] Milvus DB
+- [ ] Qdrant
