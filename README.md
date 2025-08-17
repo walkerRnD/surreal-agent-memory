@@ -1,4 +1,6 @@
 # sv
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/walkerRnD/surreal-agent-memory&project-name=surreal-agent-memory)
+
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 

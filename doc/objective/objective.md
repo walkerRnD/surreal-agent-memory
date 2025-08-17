@@ -66,6 +66,7 @@ WEB UI
 - cytoscape
 
 build modes in package.json
-- build # official website 
+- build # official website (vercel adapter)
+- build:local # official website (node adapter)
 - build:server # build MPC server with UI
 - build:cli # build CLI

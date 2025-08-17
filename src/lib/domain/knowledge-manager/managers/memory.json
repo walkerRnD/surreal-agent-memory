@@ -1,0 +1,3 @@
+{"type":"entity","name":"TestUser1","entityType":"person","observations":["likes testing","uses SvelteKit","completed API test","verified SurrealDB integration"]}
+{"type":"entity","name":"TestUser2","entityType":"person","observations":["enjoys coding","loves SurrealDB"]}
+{"type":"relation","from":"TestUser1","to":"TestUser2","relationType":"collaborates_with"}
