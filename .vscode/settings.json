@@ -5,6 +5,7 @@
     "modelcontextprotocol",
     "paraglide",
     "streamable",
+    "surql",
     "surrealdb"
   ]
 }

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import type { EntityNode } from '../types/entity-node.type';
 
 // Define memory file path using environment variable with fallback
 const defaultMemoryPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'memory.json');
@@ -15,33 +15,28 @@ const MEMORY_FILE_PATH = process.env.MEMORY_FILE_PATH
   : defaultMemoryPath;
 
 // We are storing our memory using entities, relations, and observations in a graph structure
-export interface Entity {
-  name: string;
-  entityType: string;
-  observations: string[];
-}
 
-export interface Relation {
+export interface RelationV0 {
   from: string;
   to: string;
   relationType: string;
 }
 
-export interface KnowledgeGraph {
-  entities: Entity[];
-  relations: Relation[];
+export interface KnowledgeGraphV0 {
+  entities: EntityNode[];
+  relations: RelationV0[];
 }
 
 // The KnowledgeGraphManager class contains all operations to interact with the knowledge graph
 class KnowledgeGraphManagerV0 {
-  private async loadGraph(): Promise<KnowledgeGraph> {
+  private async loadGraph(): Promise<KnowledgeGraphV0> {
     try {
       const data = await fs.readFile(MEMORY_FILE_PATH, "utf-8");
       const lines = data.split("\n").filter(line => line.trim() !== "");
-      return lines.reduce((graph: KnowledgeGraph, line) => {
+      return lines.reduce((graph: KnowledgeGraphV0, line) => {
         const item = JSON.parse(line);
-        if (item.type === "entity") graph.entities.push(item as Entity);
-        if (item.type === "relation") graph.relations.push(item as Relation);
+        if (item.type === "entity") graph.entities.push(item as EntityNode);
+        if (item.type === "relation") graph.relations.push(item as RelationV0);
         return graph;
       }, { entities: [], relations: [] });
     } catch (error) {
@@ -52,7 +47,7 @@ class KnowledgeGraphManagerV0 {
     }
   }
 
-  private async saveGraph(graph: KnowledgeGraph): Promise<void> {
+  private async saveGraph(graph: KnowledgeGraphV0): Promise<void> {
     const lines = [
       ...graph.entities.map(e => JSON.stringify({ type: "entity", ...e })),
       ...graph.relations.map(r => JSON.stringify({ type: "relation", ...r })),
@@ -60,7 +55,7 @@ class KnowledgeGraphManagerV0 {
     await fs.writeFile(MEMORY_FILE_PATH, lines.join("\n"));
   }
 
-  async createEntities(entities: Entity[]): Promise<Entity[]> {
+  async createEntities(entities: EntityNode[]): Promise<EntityNode[]> {
     const graph = await this.loadGraph();
     const newEntities = entities.filter(e => !graph.entities.some(existingEntity => existingEntity.name === e.name));
     graph.entities.push(...newEntities);
@@ -68,11 +63,11 @@ class KnowledgeGraphManagerV0 {
     return newEntities;
   }
 
-  async createRelations(relations: Relation[]): Promise<Relation[]> {
+  async createRelations(relations: RelationV0[]): Promise<RelationV0[]> {
     const graph = await this.loadGraph();
-    const newRelations = relations.filter(r => !graph.relations.some(existingRelation => 
-      existingRelation.from === r.from && 
-      existingRelation.to === r.to && 
+    const newRelations = relations.filter(r => !graph.relations.some(existingRelation =>
+      existingRelation.from === r.from &&
+      existingRelation.to === r.to &&
       existingRelation.relationType === r.relationType
     ));
     graph.relations.push(...newRelations);
@@ -113,66 +108,66 @@ class KnowledgeGraphManagerV0 {
     await this.saveGraph(graph);
   }
 
-  async deleteRelations(relations: Relation[]): Promise<void> {
+  async deleteRelations(relations: RelationV0[]): Promise<void> {
     const graph = await this.loadGraph();
-    graph.relations = graph.relations.filter(r => !relations.some(delRelation => 
-      r.from === delRelation.from && 
-      r.to === delRelation.to && 
+    graph.relations = graph.relations.filter(r => !relations.some(delRelation =>
+      r.from === delRelation.from &&
+      r.to === delRelation.to &&
       r.relationType === delRelation.relationType
     ));
     await this.saveGraph(graph);
   }
 
-  async readGraph(): Promise<KnowledgeGraph> {
+  async readGraph(): Promise<KnowledgeGraphV0> {
     return this.loadGraph();
   }
 
   // Very basic search function
-  async searchNodes(query: string): Promise<KnowledgeGraph> {
+  async searchNodes(query: string): Promise<KnowledgeGraphV0> {
     const graph = await this.loadGraph();
-    
+
     // Filter entities
-    const filteredEntities = graph.entities.filter(e => 
+    const filteredEntities = graph.entities.filter(e =>
       e.name.toLowerCase().includes(query.toLowerCase()) ||
       e.entityType.toLowerCase().includes(query.toLowerCase()) ||
       e.observations.some(o => o.toLowerCase().includes(query.toLowerCase()))
     );
-  
+
     // Create a Set of filtered entity names for quick lookup
     const filteredEntityNames = new Set(filteredEntities.map(e => e.name));
-  
+
     // Filter relations to only include those between filtered entities
-    const filteredRelations = graph.relations.filter(r => 
+    const filteredRelations = graph.relations.filter(r =>
       filteredEntityNames.has(r.from) && filteredEntityNames.has(r.to)
     );
-  
-    const filteredGraph: KnowledgeGraph = {
+
+    const filteredGraph: KnowledgeGraphV0 = {
       entities: filteredEntities,
       relations: filteredRelations,
     };
-  
+
     return filteredGraph;
   }
 
-  async openNodes(names: string[]): Promise<KnowledgeGraph> {
+  async openNodes(names: string[]): Promise<KnowledgeGraphV0> {
     const graph = await this.loadGraph();
-    
+
     // Filter entities
     const filteredEntities = graph.entities.filter(e => names.includes(e.name));
-  
+
     // Create a Set of filtered entity names for quick lookup
     const filteredEntityNames = new Set(filteredEntities.map(e => e.name));
-  
+
     // Filter relations to only include those between filtered entities
-    const filteredRelations = graph.relations.filter(r => 
+    const filteredRelations = graph.relations.filter(r =>
       filteredEntityNames.has(r.from) && filteredEntityNames.has(r.to)
     );
-  
-    const filteredGraph: KnowledgeGraph = {
+
+    const filteredGraph: KnowledgeGraphV0 = {
       entities: filteredEntities,
       relations: filteredRelations,
     };
-  
+
     return filteredGraph;
   }
 }

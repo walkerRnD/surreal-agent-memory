@@ -1,80 +1,50 @@
 import { getDb } from '../../../server/infra/db';
-import {
-  EntitySchema,
-  RelationSchema,
-  EntityInputSchema,
-  RelationInputSchema,
-  ObservationInputSchema,
-  EntityDeletionSchema,
-  ObservationDeletionSchema,
-  RelationDeletionSchema,
-  SearchQuerySchema,
-  NodeNamesSchema,
-  type EntityInput,
-  type RelationInput,
-  type ObservationInput,
-  convertToLegacyRelation,
-  createEntityId,
-} from '../schemas';
+import { EntityNodeRepo } from '../repository/entity-node.repo';
+import { EntityDeletionSchema, EntityNodeInputSchema, EntityNodeSchema, type EntityInput } from '../types/entity-node.type';
+import { type ObservationInput, ObservationInputSchema, ObservationDeletionSchema } from '../types/observation.type';
+import { SearchQuerySchema, NodeNamesSchema } from '../types/query.type';
+import { RelationDeletionSchema, RelationInputSchema, RelationSchema, type RelationInput } from '../types/relation.type';
+import type { createEntityId, convertToLegacyRelation } from '../utils/relation-utils';
 
 // Import legacy types for backward compatibility
-import type { KnowledgeGraph } from './manager-v0';
+import type { KnowledgeGraphV0 } from './manager-v0';
 
 // SurrealDB-based Knowledge Graph Manager with pure schemaless approach
 class KnowledgeGraphManagerV1 {
-  
+
   async createEntities(entities: EntityInput[]): Promise<EntityInput[]> {
+    const validatedEntities = entities.map(e => EntityNodeInputSchema.parse(e));
     const db = await getDb();
-    
-    // Validate input with Zod
-    const validatedEntities = entities.map(e => EntityInputSchema.parse(e));
-    
+    const entityRepo = new EntityNodeRepo(db);
+
     const results: EntityInput[] = [];
-    
     for (const entity of validatedEntities) {
       try {
-        // Check if entity already exists
-        const existing = await db.select(createEntityId(entity.name));
-        if (existing && existing.length > 0) {
-          // Entity already exists, skip it
-          continue;
-        }
-        
-        // Pure CREATE - no schema, SurrealDB creates table automatically
-        const created = await db.create(createEntityId(entity.name), {
-          name: entity.name,
-          entityType: entity.entityType,
-          observations: entity.observations,
-          created_at: new Date(),
-          updated_at: new Date(),
-        });
-        
+        const existing = await entityRepo.findByName(entity.name);
+        if (existing !== null) continue;
+
+        const created = await entityRepo.create(entity);
+
         if (created) {
-          // Validate the created entity and convert back to input format
-          const validatedCreated = EntitySchema.parse(created);
           results.push({
-            name: validatedCreated.name,
-            entityType: validatedCreated.entityType,
-            observations: validatedCreated.observations,
+            name: created.name,
+            entityType: created.entityType,
+            observations: created.observations,
           });
         }
       } catch (error) {
         console.error(`Failed to create entity ${entity.name}:`, error);
-        // Continue with other entities
       }
     }
-    
+
     return results;
   }
 
   async createRelations(relations: RelationInput[]): Promise<RelationInput[]> {
-    const db = await getDb();
-    
-    // Validate input with Zod
     const validatedRelations = relations.map(r => RelationInputSchema.parse(r));
-    
+    const db = await getDb();
+
     const results: RelationInput[] = [];
-    
     for (const relation of validatedRelations) {
       try {
         // Check if relation already exists
@@ -87,24 +57,24 @@ class KnowledgeGraphManagerV1 {
           to: createEntityId(relation.to),
           relationType: relation.relationType,
         });
-        
+
         if (existing && existing.length > 0) {
           // Relation already exists, skip it
           continue;
         }
-        
+
         // Pure RELATE - no table definitions needed, creates 'knows' table automatically
         const relateQuery = `
           RELATE $from->knows->$to 
           SET relationType = $relationType, created_at = time::now()
         `;
-        
+
         const created = await db.query(relateQuery, {
           from: createEntityId(relation.from),
           to: createEntityId(relation.to),
           relationType: relation.relationType,
         });
-        
+
         if (created && created.length > 0) {
           // Validate the created relation and convert back to input format
           const validatedCreated = RelationSchema.parse(created[0]);
@@ -115,45 +85,45 @@ class KnowledgeGraphManagerV1 {
         // Continue with other relations
       }
     }
-    
+
     return results;
   }
 
   async addObservations(observations: ObservationInput[]): Promise<{ entityName: string; addedObservations: string[] }[]> {
     const db = await getDb();
-    
+
     // Validate input with Zod
     const validatedObservations = observations.map(o => ObservationInputSchema.parse(o));
-    
+
     const results: { entityName: string; addedObservations: string[] }[] = [];
-    
+
     for (const observation of validatedObservations) {
       try {
         const entityId = createEntityId(observation.entityName);
-        
+
         // Get current entity
         const entity = await db.select(entityId);
         if (!entity) {
           throw new Error(`Entity with name ${observation.entityName} not found`);
         }
-        
-        const currentEntity = EntitySchema.parse(entity);
-        
+
+        const currentEntity = EntityNodeSchema.parse(entity);
+
         // Filter out observations that already exist
         const newObservations = observation.contents.filter(
           content => !currentEntity.observations.includes(content)
         );
-        
+
         if (newObservations.length > 0) {
           // Update entity with new observations
           const updatedObservations = [...currentEntity.observations, ...newObservations];
-          
+
           await db.merge(entityId, {
             observations: updatedObservations,
             updated_at: new Date(),
           });
         }
-        
+
         results.push({
           entityName: observation.entityName,
           addedObservations: newObservations,
@@ -166,29 +136,29 @@ class KnowledgeGraphManagerV1 {
         });
       }
     }
-    
+
     return results;
   }
 
   async deleteEntities(entityNames: string[]): Promise<void> {
     const db = await getDb();
-    
+
     // Validate input with Zod
     const validatedEntityNames = EntityDeletionSchema.parse(entityNames);
-    
+
     for (const entityName of validatedEntityNames) {
       try {
         const entityId = createEntityId(entityName);
-        
+
         // Delete the entity
         await db.delete(entityId);
-        
+
         // Delete all relations involving this entity
         // SurrealDB automatically handles cascade deletion for graph relations
         await db.query(`
           DELETE knows WHERE in = $entityId OR out = $entityId
         `, { entityId });
-        
+
       } catch (error) {
         console.error(`Failed to delete entity ${entityName}:`, error);
         // Continue with other entities
@@ -198,33 +168,33 @@ class KnowledgeGraphManagerV1 {
 
   async deleteObservations(deletions: { entityName: string; observations: string[] }[]): Promise<void> {
     const db = await getDb();
-    
+
     // Validate input with Zod
     const validatedDeletions = ObservationDeletionSchema.parse(deletions);
-    
+
     for (const deletion of validatedDeletions) {
       try {
         const entityId = createEntityId(deletion.entityName);
-        
+
         // Get current entity
         const entity = await db.select(entityId);
         if (!entity) {
           continue; // Entity doesn't exist, skip
         }
-        
-        const currentEntity = EntitySchema.parse(entity);
-        
+
+        const currentEntity = EntityNodeSchema.parse(entity);
+
         // Filter out observations to delete
         const updatedObservations = currentEntity.observations.filter(
           obs => !deletion.observations.includes(obs)
         );
-        
+
         // Update entity with filtered observations
         await db.merge(entityId, {
           observations: updatedObservations,
           updated_at: new Date(),
         });
-        
+
       } catch (error) {
         console.error(`Failed to delete observations from entity ${deletion.entityName}:`, error);
         // Continue with other deletions
@@ -257,7 +227,7 @@ class KnowledgeGraphManagerV1 {
     }
   }
 
-  async readGraph(): Promise<KnowledgeGraph> {
+  async readGraph(): Promise<KnowledgeGraphV0> {
     const db = await getDb();
 
     try {
@@ -266,11 +236,11 @@ class KnowledgeGraphManagerV1 {
       const relations = await db.select('knows');
 
       // Validate and transform the data
-      const validatedEntities = entities.map(e => EntitySchema.parse(e));
+      const validatedEntities = entities.map(e => EntityNodeSchema.parse(e));
       const validatedRelations = relations.map(r => RelationSchema.parse(r));
 
       // Convert to legacy format for backward compatibility
-      const legacyGraph: KnowledgeGraph = {
+      const legacyGraph: KnowledgeGraphV0 = {
         entities: validatedEntities.map(e => ({
           name: e.name,
           entityType: e.entityType,
@@ -286,7 +256,7 @@ class KnowledgeGraphManagerV1 {
     }
   }
 
-  async searchNodes(query: string): Promise<KnowledgeGraph> {
+  async searchNodes(query: string): Promise<KnowledgeGraphV0> {
     const db = await getDb();
 
     // Validate input with Zod
@@ -319,7 +289,7 @@ class KnowledgeGraphManagerV1 {
       const relations = relationsResult || [];
 
       // Validate and transform the data
-      const validatedEntities = entities.map(e => EntitySchema.parse(e));
+      const validatedEntities = entities.map(e => EntityNodeSchema.parse(e));
       const validatedRelations = relations.map(r => RelationSchema.parse(r));
 
       // Convert to legacy format for backward compatibility
@@ -339,7 +309,7 @@ class KnowledgeGraphManagerV1 {
     }
   }
 
-  async openNodes(names: string[]): Promise<KnowledgeGraph> {
+  async openNodes(names: string[]): Promise<KnowledgeGraphV0> {
     const db = await getDb();
 
     // Validate input with Zod
@@ -368,7 +338,7 @@ class KnowledgeGraphManagerV1 {
       const relations = relationsResult || [];
 
       // Validate and transform the data
-      const validatedEntities = entities.map(e => EntitySchema.parse(e));
+      const validatedEntities = entities.map(e => EntityNodeSchema.parse(e));
       const validatedRelations = relations.map(r => RelationSchema.parse(r));
 
       // Convert to legacy format for backward compatibility
@@ -393,4 +363,4 @@ class KnowledgeGraphManagerV1 {
 export const knowledgeGraphManagerV1 = new KnowledgeGraphManagerV1();
 
 // Export types for backward compatibility
-export type { Entity, Relation, KnowledgeGraph } from './manager-v0.js';
+export type { EntityNode as Entity, RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0.js';

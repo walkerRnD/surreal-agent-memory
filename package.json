@@ -5,10 +5,11 @@
 	"type": "module",
 	"scripts": {
 		"====== build modes ======": "",
-		"dev": "vite dev",
 		"build": "vite build",
 		"build:local": "vite build",
 		"====== run modes ======": "",
+		"dev": "vite dev",
+		"dev:debug": "node --inspect-brk=9229 ./node_modules/.bin/vite dev",
 		"preview": "vite preview",
 		"start": "node build/index.js",
 		"====== utils ======": "",

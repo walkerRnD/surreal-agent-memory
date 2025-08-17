@@ -6,12 +6,12 @@ import { knowledgeGraphManagerV1 } from './manager-v1';
 const KNOWLEDGE_GRAPH_VERSION = process.env.KNOWLEDGE_GRAPH_VERSION || 'v1';
 
 // Export the appropriate manager based on feature flag
-export const knowledgeGraphManager = KNOWLEDGE_GRAPH_VERSION === 'v1' 
-  ? knowledgeGraphManagerV1 
+export const knowledgeGraphManager = KNOWLEDGE_GRAPH_VERSION === 'v1'
+  ? knowledgeGraphManagerV1
   : knowledgeGraphManagerV0;
 
 // Export types for backward compatibility
-export type { Entity, Relation, KnowledgeGraph } from './manager-v0';
+export type { EntityNode as Entity, RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0';
 
 // Export both managers for testing and migration purposes
 export { knowledgeGraphManager as knowledgeGraphManagerV0 } from './manager-v0';
@@ -111,11 +111,11 @@ function parseJSONLContent(content: string): { entities: any[], relations: any[]
 // Health check function to verify the active manager is working
 export async function healthCheck(): Promise<{ version: string; status: 'healthy' | 'error'; error?: string }> {
   const version = getActiveManagerVersion();
-  
+
   try {
     // Try to read the graph to verify the manager is working
     await knowledgeGraphManager.readGraph();
-    
+
     return {
       version,
       status: 'healthy',
