@@ -1,0 +1,27 @@
+{
+	"mcpServers": {
+		"context7": {
+			"type": "streamable-http",
+			"url": "https://mcp.context7.com/mcp",
+			"alwaysAllow": ["get-library-docs", "resolve-library-id"]
+		},
+		"memory": {
+			"command": "npx",
+			"args": ["-y", "@modelcontextprotocol/server-memory"],
+			"env": {
+				"MEMORY_FILE_PATH": "C:\\Users\\walke\\OneDrive\\Documents\\dev\\+shared\\mcp-memory\\memory.json"
+			},
+			"alwaysAllow": [
+				"create_entities",
+				"create_relations",
+				"delete_entities",
+				"add_observations",
+				"delete_observations",
+				"delete_relations",
+				"read_graph",
+				"search_nodes",
+				"open_nodes"
+			]
+		}
+	}
+}
