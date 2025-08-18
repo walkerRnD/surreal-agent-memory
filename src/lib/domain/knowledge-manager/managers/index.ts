@@ -6,9 +6,7 @@ import { knowledgeGraphManagerV1 } from './manager-v1';
 const KNOWLEDGE_GRAPH_VERSION = process.env.KNOWLEDGE_GRAPH_VERSION || 'v1';
 
 // Export the appropriate manager based on feature flag
-export const knowledgeGraphManager = KNOWLEDGE_GRAPH_VERSION === 'v1'
-  ? knowledgeGraphManagerV1
-  : knowledgeGraphManagerV0;
+export const knowledgeGraphManager = knowledgeGraphManagerV1;
 
 // Export types for backward compatibility
 export type { EntityNode as Entity, RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0';

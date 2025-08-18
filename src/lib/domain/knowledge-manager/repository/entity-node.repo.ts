@@ -76,8 +76,8 @@ export class EntityNodeRepo {
     try {
       const [entities] = await this.db.query<[EntityNodeEntity[]]>(/* surql */`
         SELECT * FROM entity_node
-        WHERE name CONTAINS $query
-           OR entityType CONTAINS $query
+        WHERE name @@ $query
+           OR entityType @@ $query
            OR array::any(observations, |$obs| $obs CONTAINS $query)
       `, { query });
       return entities || [];

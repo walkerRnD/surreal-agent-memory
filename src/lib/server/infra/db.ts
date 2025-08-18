@@ -1,6 +1,7 @@
 import { Surreal } from "surrealdb";
 import { SERVER_CONFIG } from "../config.js";
 import { surrealdbNodeEngines } from "@surrealdb/node";
+import { INIT_DB_QUERY } from "./init-db.query.js";
 
 const DB_CONF = SERVER_CONFIG.db;
 let db: Surreal | undefined;
@@ -108,9 +109,9 @@ export async function getDb(): Promise<Surreal> {
     db = new Surreal({
       engines: surrealdbNodeEngines(),
     });
-    dLog("getDb - Surreal instance created, connecting...");
     await connectDb(db);
-    dLog("getDb - New connection established successfully");
+    // await db.query(INIT_DB_QUERY);
+    dLog("getDb - New connection established successfully", await db.query(INIT_DB_QUERY));
 
     return db;
   } catch (err: unknown) {
