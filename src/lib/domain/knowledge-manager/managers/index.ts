@@ -9,7 +9,7 @@ const KNOWLEDGE_GRAPH_VERSION = process.env.KNOWLEDGE_GRAPH_VERSION || 'v1';
 export const knowledgeGraphManager = knowledgeGraphManagerV1;
 
 // Export types for backward compatibility
-export type { EntityNode as Entity, RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0';
+export type { RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0';
 
 // Export both managers for testing and migration purposes
 export { knowledgeGraphManager as knowledgeGraphManagerV0 } from './manager-v0';

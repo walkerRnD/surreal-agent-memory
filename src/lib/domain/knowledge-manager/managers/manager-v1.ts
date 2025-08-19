@@ -374,4 +374,4 @@ class KnowledgeGraphManagerV1 {
 export const knowledgeGraphManagerV1 = new KnowledgeGraphManagerV1();
 
 // Export types for backward compatibility
-export type { EntityNode as Entity, RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0.js';
+export type { RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0.js';

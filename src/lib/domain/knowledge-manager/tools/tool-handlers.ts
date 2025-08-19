@@ -1,4 +1,4 @@
-import { knowledgeGraphManager, type Entity, type Relation } from '../managers/index';
+import { knowledgeGraphManager, type Relation } from '../managers/index';
 
 // Type definitions for tool inputs
 export type CreateEntitiesInput = {
@@ -55,7 +55,7 @@ export type OpenNodesInput = {
 
 // Tool handlers for Vercel MCP adapter format
 export const createEntitiesHandler = async (input: CreateEntitiesInput) => {
-  const result = await knowledgeGraphManager.createEntities(input.entities as Entity[]);
+  const result = await knowledgeGraphManager.createEntities(input.entities);
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
   };
@@ -120,7 +120,7 @@ export const openNodesHandler = async (input: OpenNodesInput) => {
 // Tool handlers for MCP SDK format (used in CLI)
 export const mcpToolHandlers = {
   create_entities: async (args: any) => {
-    return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.createEntities(args.entities as Entity[]), null, 2) }] };
+    return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.createEntities(args.entities), null, 2) }] };
   },
   create_relations: async (args: any) => {
     return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.createRelations(args.relations as Relation[]), null, 2) }] };
