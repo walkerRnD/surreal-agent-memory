@@ -110,8 +110,8 @@ export async function getDb(): Promise<Surreal> {
       engines: surrealdbNodeEngines(),
     });
     await connectDb(db);
-    // await db.query(INIT_DB_QUERY);
-    dLog("getDb - New connection established successfully", await db.query(INIT_DB_QUERY));
+    await db.query(INIT_DB_QUERY);
+    dLog("getDb - New connection established successfully", await db.query('INFO FOR DB'));
 
     return db;
   } catch (err: unknown) {
