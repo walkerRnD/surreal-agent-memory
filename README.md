@@ -59,6 +59,32 @@ Then configure as streamable HTTP MCP server:
 }
 ```
 
+### MCP Quick Connect (Streamable HTTP with Headers)
+
+For fastest setup in tools like Claude Desktop, use the MCP HTTP endpoint with DB headers (as shown in [`.gemini/settings.json`](.gemini/settings.json:1)):
+
+```json
+{
+  "mcpServers": {
+    "memory": {
+      "type": "streamable-http",
+      "url": "http://localhost:5173/mcp",
+      "headers": {
+        "X-DB-Host": "surrealkv://data.db",
+        "X-DB-Namespace": "local",
+        "X-DB-Database": "persisted",
+        "X-DB-Token": "YOUR_SURREALDB_JWT"
+      }
+    }
+  }
+}
+```
+
+Notes:
+- Do not commit secrets. Store X-DB-Token securely (e.g., OS keychain or environment-specific secure storage).
+- Required headers: X-DB-Host, X-DB-Namespace, X-DB-Database, X-DB-Token.
+- Point `url` to your running server MCP endpoint (dev UI serves it at `http://localhost:5173/mcp`).
+
 ### With Configuration File
 
 ```bash

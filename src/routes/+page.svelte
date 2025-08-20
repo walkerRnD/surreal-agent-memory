@@ -244,6 +244,91 @@
       </div>
     </div>
 
+    <!-- MCP Quick Connect -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-16">
+      <h2 class="text-3xl font-bold text-center mb-8">⚡ MCP Quick Connect</h2>
+      <p class="text-gray-600 mb-6 text-center max-w-3xl mx-auto">
+        Fastest way to connect from MCP-compatible apps (e.g., Claude Desktop)
+        using the HTTP endpoint with DB headers. Ensure your local dev server is
+        running so the MCP endpoint is available at <code
+          >http://localhost:5173/mcp</code
+        >.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Headers-based MCP HTTP -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            <span
+              class="bg-green-100 text-green-800 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3"
+              >3</span
+            >
+            Streamable HTTP with Headers
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Add this to your MCP client configuration:
+          </p>
+          <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code
+              >{`{
+  "mcpServers": {
+    "memory": {
+      "type": "streamable-http",
+      "url": "http://localhost:5173/mcp",
+      "headers": {
+        "X-DB-Host": "surrealkv://data.db",
+        "X-DB-Namespace": "local",
+        "X-DB-Database": "persisted",
+        "X-DB-Token": "YOUR_SURREALDB_JWT"
+      }
+    }
+  }
+}`}</code
+            ></pre>
+          <ul class="text-sm text-gray-600 list-disc pl-6 mt-4 space-y-1">
+            <li>
+              Required headers: X-DB-Host, X-DB-Namespace, X-DB-Database,
+              X-DB-Token
+            </li>
+            <li>Store X-DB-Token securely; do not commit secrets</li>
+            <li>Use your dev/prod MCP URL as appropriate</li>
+          </ul>
+        </div>
+
+        <!-- Reference Links -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4">References</h3>
+          <ul class="space-y-3 text-blue-700">
+            <li>
+              <a
+                class="hover:underline"
+                href="https://modelcontextprotocol.io/"
+                target="_blank"
+              >
+                Model Context Protocol Docs
+              </a>
+            </li>
+            <li>
+              <a
+                class="hover:underline"
+                href="https://surrealdb.com/docs"
+                target="_blank"
+              >
+                SurrealDB Docs
+              </a>
+            </li>
+            <li>
+              <a
+                class="hover:underline"
+                href="https://github.com/walkerRnD/surreal-agent-memory"
+                target="_blank"
+              >
+                Repository: Headers example and setup
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <!-- Navigation Section -->
     <div class="bg-white rounded-lg shadow-lg p-8 mb-16">
       <h2 class="text-3xl font-bold text-center mb-8">🧭 Explore Features</h2>
