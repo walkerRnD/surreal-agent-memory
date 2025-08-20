@@ -1,4 +1,4 @@
-import { getDb } from '../../../server/infra/db';
+import type Surreal from 'surrealdb';
 import { EntityNodeRepo } from '../repository/entity-node.repo';
 import { RelationRepo } from '../repository/relation.repo';
 import { EntityDeletionSchema, EntityNodeInputSchema, type EntityInput } from '../types/entity-node.type';
@@ -11,12 +11,14 @@ import { convertToLegacyRelation } from '../utils/relation-utils';
 import type { KnowledgeGraphV0 } from './manager-v0';
 
 // SurrealDB-based Knowledge Graph Manager with pure schemaless approach
-class KnowledgeGraphManagerV1 {
+export class KnowledgeGraphManagerV1 {
+  constructor(
+    private readonly db: Surreal
+  ) { }
 
   async createEntities(entities: EntityInput[]): Promise<EntityInput[]> {
     const validatedEntities = entities.map(e => EntityNodeInputSchema.parse(e));
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
 
     const results: EntityInput[] = [];
     for (const entity of validatedEntities) {
@@ -40,8 +42,7 @@ class KnowledgeGraphManagerV1 {
 
   async createRelations(relations: RelationInput[]): Promise<RelationInput[]> {
     const validatedRelations = relations.map(r => RelationInputSchema.parse(r));
-    const db = await getDb();
-    const relationRepo = new RelationRepo(db);
+    const relationRepo = new RelationRepo(this.db);
 
     const results: RelationInput[] = [];
     for (const relation of validatedRelations) {
@@ -62,8 +63,7 @@ class KnowledgeGraphManagerV1 {
 
   async addObservations(observations: ObservationInput[]): Promise<{ entityName: string; addedObservations: string[] }[]> {
     const validatedObservations = observations.map(o => ObservationInputSchema.parse(o));
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
 
     const results: { entityName: string; addedObservations: string[] }[] = [];
 
@@ -107,9 +107,8 @@ class KnowledgeGraphManagerV1 {
 
   async deleteEntities(entityNames: string[]): Promise<string[]> {
     const validatedEntityNames = EntityDeletionSchema.parse(entityNames);
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
-    const relationRepo = new RelationRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
+    const relationRepo = new RelationRepo(this.db);
 
     const results: string[] = [];
 
@@ -146,8 +145,7 @@ class KnowledgeGraphManagerV1 {
 
   async deleteObservations(deletions: { entityName: string; observations: string[] }[]): Promise<{ entityName: string; deletedObservations: string[] }[]> {
     const validatedDeletions = ObservationDeletionSchema.parse(deletions);
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
 
     const results: { entityName: string; deletedObservations: string[] }[] = [];
 
@@ -206,8 +204,7 @@ class KnowledgeGraphManagerV1 {
 
   async deleteRelations(relations: RelationInput[]): Promise<RelationInput[]> {
     const validatedRelations = RelationDeletionSchema.parse(relations);
-    const db = await getDb();
-    const relationRepo = new RelationRepo(db);
+    const relationRepo = new RelationRepo(this.db);
 
     const results: RelationInput[] = [];
 
@@ -238,9 +235,8 @@ class KnowledgeGraphManagerV1 {
   }
 
   async readGraph(): Promise<KnowledgeGraphV0> {
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
-    const relationRepo = new RelationRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
+    const relationRepo = new RelationRepo(this.db);
 
     try {
       // Use repository methods to get all data
@@ -266,9 +262,8 @@ class KnowledgeGraphManagerV1 {
 
   async searchNodes(query: string): Promise<KnowledgeGraphV0> {
     const validatedQuery = SearchQuerySchema.parse(query);
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
-    const relationRepo = new RelationRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
+    const relationRepo = new RelationRepo(this.db);
 
     try {
       // Search entities using repository method
@@ -303,9 +298,8 @@ class KnowledgeGraphManagerV1 {
 
   async openNodes(names: string[]): Promise<KnowledgeGraphV0> {
     const validatedNames = NodeNamesSchema.parse(names);
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
-    const relationRepo = new RelationRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
+    const relationRepo = new RelationRepo(this.db);
 
     try {
       // Get specific entities by name using repository method
@@ -339,9 +333,8 @@ class KnowledgeGraphManagerV1 {
   }
 
   async clearGraph(): Promise<{ deletedEntities: number; deletedRelations: number }> {
-    const db = await getDb();
-    const entityRepo = new EntityNodeRepo(db);
-    const relationRepo = new RelationRepo(db);
+    const entityRepo = new EntityNodeRepo(this.db);
+    const relationRepo = new RelationRepo(this.db);
 
     try {
       // Get counts before deletion for reporting
@@ -352,10 +345,10 @@ class KnowledgeGraphManagerV1 {
       const relationCount = relations.length;
 
       // Clear all relations first
-      await db.query('DELETE relation');
+      await this.db.query('DELETE relation');
 
       // Clear all entities
-      await db.query('DELETE entity_node');
+      await this.db.query('DELETE entity_node');
 
       console.log(`Cleared ${entityCount} entities and ${relationCount} relations from the knowledge graph`);
 
@@ -369,9 +362,6 @@ class KnowledgeGraphManagerV1 {
     }
   }
 }
-
-// Export the new manager instance
-export const knowledgeGraphManagerV1 = new KnowledgeGraphManagerV1();
 
 // Export types for backward compatibility
 export type { RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0.js';

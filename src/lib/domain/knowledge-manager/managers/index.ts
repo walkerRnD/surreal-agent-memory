@@ -1,19 +1,14 @@
-import { knowledgeGraphManager as knowledgeGraphManagerV0 } from './manager-v0';
-import { knowledgeGraphManagerV1 } from './manager-v1';
+import { knowledgeGraphManager, knowledgeGraphManager as knowledgeGraphManagerV0 } from './manager-v0';
 
 // Feature flag to switch between file-based (V0) and SurrealDB-based (V1) managers
 // Set via environment variable: KNOWLEDGE_GRAPH_VERSION=v1 to use SurrealDB
 const KNOWLEDGE_GRAPH_VERSION = process.env.KNOWLEDGE_GRAPH_VERSION || 'v1';
-
-// Export the appropriate manager based on feature flag
-export const knowledgeGraphManager = knowledgeGraphManagerV1;
 
 // Export types for backward compatibility
 export type { RelationV0 as Relation, KnowledgeGraphV0 as KnowledgeGraph } from './manager-v0';
 
 // Export both managers for testing and migration purposes
 export { knowledgeGraphManager as knowledgeGraphManagerV0 } from './manager-v0';
-export { knowledgeGraphManagerV1 } from './manager-v1';
 
 // Utility function to check which version is currently active
 export function getActiveManagerVersion(): 'v0' | 'v1' {
@@ -124,19 +119,5 @@ export async function healthCheck(): Promise<{ version: string; status: 'healthy
       status: 'error',
       error: error instanceof Error ? error.message : String(error),
     };
-  }
-}
-
-// Clear database utility function
-export async function clearGraph(): Promise<{ deletedEntities: number; deletedRelations: number }> {
-  console.log('Clearing knowledge graph...');
-
-  try {
-    const result = await knowledgeGraphManager.clearGraph();
-    console.log(`Successfully cleared ${result.deletedEntities} entities and ${result.deletedRelations} relations`);
-    return result;
-  } catch (error) {
-    console.error('Failed to clear graph:', error);
-    throw error;
   }
 }

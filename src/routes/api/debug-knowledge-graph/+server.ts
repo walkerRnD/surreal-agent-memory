@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { knowledgeGraphManager, clearGraph } from '../../../lib/domain/knowledge-manager/managers/index';
 import { getDb } from '../../../lib/server/infra/db';
+import { KnowledgeGraphManagerV1 } from '../../../lib/domain/knowledge-manager/managers/manager-v1';
 
 export const GET: RequestHandler = async () => {
   try {
@@ -25,6 +25,7 @@ export const GET: RequestHandler = async () => {
 
     try {
       const db = await getDb();
+      const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
       debugData.dbStatus = 'connected';
 
       console.log('🔍 Debug: Querying raw entities from SurrealDB...');
@@ -108,9 +109,11 @@ export const GET: RequestHandler = async () => {
 export const POST: RequestHandler = async ({ request }) => {
   try {
     const { action } = await request.json();
+    const db = await getDb();
+    const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
 
     if (action === 'clear') {
-      const result = await clearGraph();
+      const result = await knowledgeGraphManager.clearGraph();
 
       return json({
         success: true,

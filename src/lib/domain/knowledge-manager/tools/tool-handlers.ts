@@ -1,4 +1,7 @@
-import { knowledgeGraphManager, type Relation } from '../managers/index';
+import { SERVER_CONFIG } from '../../../server/config';
+import { createDbConnection } from '../../../server/infra/db';
+import { type Relation } from '../managers/index';
+import { KnowledgeGraphManagerV1 } from '../managers/manager-v1';
 
 // Type definitions for tool inputs
 export type CreateEntitiesInput = {
@@ -53,8 +56,13 @@ export type OpenNodesInput = {
   names: string[];
 };
 
+type DB_CONF = typeof SERVER_CONFIG['db'];
+
+
 // Tool handlers for Vercel MCP adapter format
-export const createEntitiesHandler = async (input: CreateEntitiesInput) => {
+export const createEntitiesHandler = async (input: CreateEntitiesInput, conf: DB_CONF) => {
+  const db = await createDbConnection(conf);
+  const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const result = await knowledgeGraphManager.createEntities(input.entities);
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
