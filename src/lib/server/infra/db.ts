@@ -29,7 +29,6 @@ export async function getDb(): Promise<Surreal> {
   try {
     // dLog("getDb - No existing connection, creating new one");
     db = await createDbConnection(SERVER_DB_CONF);
-    await db.query(INIT_DB_QUERY);
     // dLog("getDb - New connection established successfully");
 
     return db;
@@ -48,7 +47,7 @@ export async function closeDashboardDb(): Promise<void> {
   db = undefined;
 }
 
-export const createDbConnection = async (conf: typeof SERVER_DB_CONF) => {
+export const createDbConnection = async (conf: typeof SERVER_DB_CONF & { token?: string }) => {
   const { host, namespace, database, username, password } = conf;
   const isEmbedded = host.startsWith("mem://") || host.startsWith("surrealkv://");
   const db = new Surreal(isEmbedded ? { engines: surrealdbNodeEngines() } : undefined);
@@ -56,7 +55,15 @@ export const createDbConnection = async (conf: typeof SERVER_DB_CONF) => {
     namespace: namespace,
     database: database,
   });
+  await db.query(INIT_DB_QUERY);
   if (isEmbedded) return db;
+  if (conf.token) {
+    await db.authenticate(conf.token);
+    return db;
+  }
+  if (!username || !password) {
+    throw new Error("Username and password are required for non-embedded databases");
+  }
   await db.signin({
     username: username,
     password: password,

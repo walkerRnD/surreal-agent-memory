@@ -5,23 +5,27 @@
 			"url": "https://mcp.context7.com/mcp",
 			"alwaysAllow": ["get-library-docs", "resolve-library-id"]
 		},
-		"memory": {
-			"command": "npx",
-			"args": ["-y", "@modelcontextprotocol/server-memory"],
-			"env": {
-				"MEMORY_FILE_PATH": "C:\\Users\\walke\\OneDrive\\Documents\\dev\\+shared\\mcp-memory\\memory.json"
-			},
-			"alwaysAllow": [
-				"create_entities",
-				"create_relations",
-				"delete_entities",
-				"add_observations",
-				"delete_observations",
-				"delete_relations",
-				"read_graph",
-				"search_nodes",
-				"open_nodes"
-			]
-		}
+    "memory": {
+      "type": "streamable-http",
+      "url": "http://localhost:5173/mcp",
+      "headers": {
+        "X-DB-Host": "testdb-069peimko9uijdipg7creigbs8.aws-use1.surreal.cloud",
+        "X-DB-Namespace": "cloud",
+        "X-DB-Database": "shared_memory",
+        "X-DB-Token": "eyJhbGciOiJQUzI1NiIsImtpZCI6IjFkNmViYjAyLWM5ZjEtNDg4Zi1iNjhjLWNlMzMzMzU4YzgyOCIsInR5cCI6IkpXVCJ9.eyJhYyI6ImNsb3VkIiwiYXVkIjoiMDY5cGVpbWtvOXVpamRpcGc3Y3JlaWdiczgiLCJleHAiOjE3NTU2NTE5MjYsImlhdCI6MTc1NTY1MTg2NiwicmwiOlsiT3duZXIiXX0.BqzxZwXl61rbCUv18vYcPYXb6TCtcPEuoPqjmm2Q-GHKW8qqy2ds0azVBJHqPVRf5NLpwUd_GYmKauYyVH4p_JzirECmRMNAYDMmPG57kXsY90D7cG9oGzv_0I097KXHzqS54KDXHD6TWCPrxU0lcH3XNiYZ8CfefRHiF9enPCtUCLJglLE11VYMYACeEJ-KBI4cvF2YMrkLCBMhY1mEYrA02SK5FI3nWrTD2begngGpvmm7QXIv-iza76EQA9hNvIrMXluFZMXzZptnXVvAOddqXEAVV1n-OL1ha2-H3BBkEe-vzlzuYnGgU93Zio1l8BZwrb24Qu4TnSPjccJEUg"
+      },
+      "alwaysAllow": [
+        "create_entities_to_memory",
+        "create_relations_to_memory",
+        "add_observations_to_memory",
+        "delete_entities_to_memory",
+        "delete_observations_to_memory",
+        "delete_relations_to_memory",
+        "read_graph_to_memory",
+        "search_nodes_to_memory",
+        "open_nodes_to_memory"
+      ],
+      "disabled": false
+    }
 	}
 }
