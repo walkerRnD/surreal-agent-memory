@@ -1,6 +1,6 @@
 import { NODE_ENV, USE_SERVER_DB, ALLOW_DB_PROXY } from '$env/static/private';
 import { SERVER_CONFIG } from '../../../server/config';
-import { createDbConnection, getDb } from '../../../server/infra/db';
+import { createDbConnection, getDb, type SERVER_DB_CONF } from '../../../server/infra/db';
 import { type Relation } from '../managers/index';
 import { KnowledgeGraphManagerV1 } from '../managers/manager-v1';
 
@@ -62,8 +62,6 @@ export type OpenNodesInput = {
   names: string[];
 };
 
-type DB_CONF = typeof SERVER_CONFIG['db'];
-
 // Type for MCP request context that includes headers
 export type McpRequestContext = {
   headers?: Record<string, string>;
@@ -71,15 +69,36 @@ export type McpRequestContext = {
   request?: Request;
 };
 
-// Helper function to extract database configuration from headers
-function getDbConfigFromHeaders(headers: Record<string, string> = {}): DB_CONF & { token?: string } {
-  // Try to get database configuration from custom headers
-  const host = headers['x-db-host'] || headers['X-DB-Host'];
-  const namespace = headers['x-db-namespace'] || headers['X-DB-Namespace'];
-  const database = headers['x-db-database'] || headers['X-DB-Database'];
-  const username = headers['x-db-username'] || headers['X-DB-Username'];
-  const password = headers['x-db-password'] || headers['X-DB-Password'];
-  const token = headers['x-db-token'] || headers['X-DB-Token'];
+export function getDbConfigFromRequest(context?: McpRequestContext): SERVER_DB_CONF {
+  const headers = context?.headers || {};
+  let queryParams: URLSearchParams | undefined;
+  if (context?.request?.url) {
+    try {
+      const url = new URL(context.request.url);
+      queryParams = url.searchParams;
+    } catch (error) {
+      console.warn('Failed to parse request URL for query parameters:', error);
+    }
+  }
+
+  const getParam = (queryKey: string, headerKeys: string[]): string | undefined => {
+    if (queryParams?.has(queryKey)) {
+      return queryParams.get(queryKey) || undefined;
+    }
+    for (const headerKey of headerKeys) {
+      if (headers[headerKey]) {
+        return headers[headerKey];
+      }
+    }
+    return undefined;
+  };
+
+  const host = getParam('db-host', ['x-db-host', 'X-DB-Host']);
+  const namespace = getParam('db-namespace', ['x-db-namespace', 'X-DB-Namespace']);
+  const database = getParam('db-database', ['x-db-database', 'X-DB-Database']);
+  const username = getParam('db-username', ['x-db-username', 'X-DB-Username']);
+  const password = getParam('db-password', ['x-db-password', 'X-DB-Password']);
+  const token = getParam('db-token', ['x-db-token', 'X-DB-Token']);
 
   const isMemory = host?.startsWith('mem://');
   if (!ALLOW_MEMORY && isMemory) {
@@ -106,7 +125,7 @@ function getDbConfigFromHeaders(headers: Record<string, string> = {}): DB_CONF &
 
 // Tool handlers for Vercel MCP adapter format
 export const createEntitiesHandler = async (input: CreateEntitiesInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const result = await knowledgeGraphManager.createEntities(input.entities);
   return {
@@ -115,7 +134,7 @@ export const createEntitiesHandler = async (input: CreateEntitiesInput, extra?: 
 };
 
 export const createRelationsHandler = async (input: CreateRelationsInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const result = await knowledgeGraphManager.createRelations(input.relations as Relation[]);
   return {
@@ -124,7 +143,7 @@ export const createRelationsHandler = async (input: CreateRelationsInput, extra?
 };
 
 export const addObservationsHandler = async (input: AddObservationsInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const result = await knowledgeGraphManager.addObservations(input.observations);
   return {
@@ -133,7 +152,7 @@ export const addObservationsHandler = async (input: AddObservationsInput, extra?
 };
 
 export const deleteEntitiesHandler = async (input: DeleteEntitiesInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   await knowledgeGraphManager.deleteEntities(input.entityNames);
   return {
@@ -142,7 +161,7 @@ export const deleteEntitiesHandler = async (input: DeleteEntitiesInput, extra?: 
 };
 
 export const deleteObservationsHandler = async (input: DeleteObservationsInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   await knowledgeGraphManager.deleteObservations(input.deletions);
   return {
@@ -151,7 +170,7 @@ export const deleteObservationsHandler = async (input: DeleteObservationsInput, 
 };
 
 export const deleteRelationsHandler = async (input: DeleteRelationsInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   await knowledgeGraphManager.deleteRelations(input.relations as Relation[]);
   return {
@@ -160,7 +179,7 @@ export const deleteRelationsHandler = async (input: DeleteRelationsInput, extra?
 };
 
 export const readGraphHandler = async (_input: ReadGraphInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const result = await knowledgeGraphManager.readGraph();
   return {
@@ -169,7 +188,7 @@ export const readGraphHandler = async (_input: ReadGraphInput, extra?: McpReques
 };
 
 export const searchNodesHandler = async (input: SearchNodesInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const result = await knowledgeGraphManager.searchNodes(input.query);
   return {
@@ -178,7 +197,7 @@ export const searchNodesHandler = async (input: SearchNodesInput, extra?: McpReq
 };
 
 export const openNodesHandler = async (input: OpenNodesInput, extra?: McpRequestContext) => {
-  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromHeaders(extra?.headers)));
+  const db = await (FORCE_SERVER_DB ? getDb() : createDbConnection(getDbConfigFromRequest(extra)));
   const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const result = await knowledgeGraphManager.openNodes(input.names);
   return {

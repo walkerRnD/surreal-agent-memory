@@ -5,7 +5,7 @@
 			"url": "https://mcp.context7.com/mcp",
 			"alwaysAllow": ["get-library-docs", "resolve-library-id"]
 		},
-    "memory": {
+    "shared-memory-management": {
       "type": "streamable-http",
       "url": "http://localhost:5173/mcp",
       "headers": {
