@@ -1,19 +1,11 @@
-import {
-  DB_DATABASE,
-  DB_HOST,
-  DB_NAMESPACE,
-  DB_PASSWORD,
-  DB_USERNAME,
-} from "$env/static/private";
-
 export const SERVER_CONFIG = {
   port: process.env.PORT || 3000,
   db: {
-    host: DB_HOST || "surrealkv://data.db",
-    namespace: DB_NAMESPACE || "local",
-    database: DB_DATABASE || "persisted",
-    username: DB_USERNAME,
-    password: DB_PASSWORD,
+    host: process.env.DB_HOST || "surrealkv://data.db",
+    namespace: process.env.DB_NAMESPACE || "local",
+    database: process.env.DB_DATABASE || "persisted",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
   }
 };
 
