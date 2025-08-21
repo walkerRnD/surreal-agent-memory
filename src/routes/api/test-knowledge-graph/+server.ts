@@ -1,6 +1,8 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { knowledgeGraphManager, getActiveManagerVersion, healthCheck } from '../../../lib/domain/knowledge-manager/managers/index';
+import { getActiveManagerVersion, healthCheck } from '../../../lib/domain/knowledge-manager/managers/index';
+import { getDb } from '../../../lib/server/infra/db';
+import { KnowledgeGraphManagerV1 } from '../../../lib/domain/knowledge-manager/managers/manager-v1';
 
 export const GET: RequestHandler = async () => {
   try {
@@ -53,6 +55,8 @@ export const GET: RequestHandler = async () => {
           observations: ['enjoys coding', 'loves SurrealDB']
         }
       ];
+      const db = await getDb();
+      const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
 
       const createdEntities = await knowledgeGraphManager.createEntities(testEntities);
       results.tests.push({
@@ -81,7 +85,8 @@ export const GET: RequestHandler = async () => {
           relationType: 'collaborates_with'
         }
       ];
-
+      const db = await getDb();
+      const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
       const createdRelations = await knowledgeGraphManager.createRelations(testRelations);
       results.tests.push({
         name: 'Create Relations',
@@ -98,7 +103,8 @@ export const GET: RequestHandler = async () => {
       results.summary.failed++;
     }
     results.summary.total++;
-
+    const db = await getDb();
+    const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
     // Test 4: Read graph
     try {
       console.log('📖 Test: Reading graph...');
@@ -106,8 +112,8 @@ export const GET: RequestHandler = async () => {
       results.tests.push({
         name: 'Read Graph',
         status: 'passed',
-        details: { 
-          entities: graph.entities.length, 
+        details: {
+          entities: graph.entities.length,
           relations: graph.relations.length,
           sample_entities: graph.entities.slice(0, 3).map(e => ({ name: e.name, type: e.entityType }))
         }
@@ -130,7 +136,7 @@ export const GET: RequestHandler = async () => {
       results.tests.push({
         name: 'Search Nodes',
         status: 'passed',
-        details: { 
+        details: {
           found_entities: searchResults.entities.length,
           found_relations: searchResults.relations.length,
           entities: searchResults.entities.map(e => ({ name: e.name, type: e.entityType }))
@@ -195,7 +201,8 @@ export const GET: RequestHandler = async () => {
 export const POST: RequestHandler = async ({ request }) => {
   try {
     const { action, fileContent, fileName } = await request.json();
-
+    const db = await getDb();
+    const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
     if (action === 'cleanup') {
       // Clean up test data
       await knowledgeGraphManager.deleteEntities(['TestUser1', 'TestUser2']);

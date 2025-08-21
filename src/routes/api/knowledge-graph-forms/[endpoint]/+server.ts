@@ -1,8 +1,11 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { knowledgeGraphManager } from '$lib/domain/knowledge-manager/managers/index';
+import { KnowledgeGraphManagerV1 } from '../../../../lib/domain/knowledge-manager/managers/manager-v1';
+import { getDb } from '../../../../lib/server/infra/db';
 
 export const GET: RequestHandler = async ({ params }) => {
+  const db = await getDb();
+  const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
   const { endpoint } = params;
 
   try {
@@ -16,14 +19,16 @@ export const GET: RequestHandler = async ({ params }) => {
     }
   } catch (error) {
     console.error(`Error in GET ${endpoint}:`, error);
-    return json({ 
-      error: error instanceof Error ? error.message : 'Unknown error' 
+    return json({
+      error: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
 };
 
 export const POST: RequestHandler = async ({ params, request }) => {
   const { endpoint } = params;
+  const db = await getDb();
+  const knowledgeGraphManager = new KnowledgeGraphManagerV1(db);
 
   try {
     const body = await request.json();
@@ -66,8 +71,8 @@ export const POST: RequestHandler = async ({ params, request }) => {
     }
   } catch (error) {
     console.error(`Error in POST ${endpoint}:`, error);
-    return json({ 
-      error: error instanceof Error ? error.message : 'Unknown error' 
+    return json({
+      error: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
 };
