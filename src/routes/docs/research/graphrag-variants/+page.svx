@@ -1,0 +1,65 @@
+---
+title: GraphRAG Variants
+description: Comparative analysis of GraphRAG, HiRAG (Knowledge/Thought), MMOA-RAG, and LazyGraphRAG
+tags: [research, graphrag, hierarchy, multi-agent]
+lastUpdated: 2025-08-23
+---
+
+<svelte:head>
+  <title>GraphRAG Variants • Surreal Agent Memory</title>
+  <meta name="description" content="Comparative analysis of GraphRAG, HiRAG (Knowledge/Thought), MMOA-RAG, and LazyGraphRAG" />
+</svelte:head>
+
+# 🧭 GraphRAG Variants
+
+<p class="text-gray-600 leading-relaxed">A normalized comparative overview of several RAG variants.</p>
+
+<div class="overflow-x-auto my-6">
+  <table class="min-w-full text-sm border border-gray-200 bg-white rounded-xl overflow-hidden">
+    <thead class="bg-gray-50 text-gray-700">
+      <tr>
+        <th class="text-left px-4 py-3 border-b">Variant</th>
+        <th class="text-left px-4 py-3 border-b">Indexing / Pre-processing</th>
+        <th class="text-left px-4 py-3 border-b">Retrieval / Querying</th>
+        <th class="text-left px-4 py-3 border-b">Differentiator</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y">
+      <tr>
+        <td class="px-4 py-3 font-medium">Normal GraphRAG</td>
+        <td class="px-4 py-3">Text segmentation; entity & relation extraction; knowledge graph; clustering; community summarization</td>
+        <td class="px-4 py-3">Uses pre-built graph with global/local search</td>
+        <td class="px-4 py-3">Structured, upfront KB construction</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">HiRAG (Knowledge)</td>
+        <td class="px-4 py-3">Offline HiIndex builds multi-layer hierarchy with summary entities</td>
+        <td class="px-4 py-3">HiRetrieval assembles evidence: Local, Global, Bridge</td>
+        <td class="px-4 py-3">Explicit semantic hierarchy</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">HiRAG (Thought)</td>
+        <td class="px-4 py-3">Instruction-tuned model for hierarchical reasoning</td>
+        <td class="px-4 py-3">Progressive chain-of-thought: filtering, combination, RAG-specific reasoning</td>
+        <td class="px-4 py-3">Reasoning skills inside the model</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">MMOA-RAG</td>
+        <td class="px-4 py-3">SFT baseline; no special index focus</td>
+        <td class="px-4 py-3">Multi-agent RL (MAPPO) optimizes Query Rewriter, Selector, Generator jointly</td>
+        <td class="px-4 py-3">End-to-end pipeline optimization</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">LazyGraphRAG</td>
+        <td class="px-4 py-3">Lightweight initial vector index</td>
+        <td class="px-4 py-3">Just-in-time graph expansion guided by LLM; best-first + BFS</td>
+        <td class="px-4 py-3">Reduced upfront cost; adaptive retrieval</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-sm text-indigo-900">
+  Future work: Add diagrams and link to examples/demos.
+</div>
+

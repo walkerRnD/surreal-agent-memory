@@ -1,0 +1,48 @@
+---
+title: RAG Reference
+description: Curated links and notes on RAG, multi-agent optimization, graphs, and evaluation
+tags: [research, rag, references]
+lastUpdated: 2025-08-23
+---
+
+<svelte:head>
+  <title>RAG Reference • Surreal Agent Memory</title>
+  <meta name="description" content="Curated links and notes on RAG, multi-agent optimization, graphs, and evaluation" />
+</svelte:head>
+
+# 📚 RAG Reference
+
+<p class="text-gray-600 leading-relaxed">A curated set of links we use to guide our design and experiments. Items will be annotated over time.</p>
+
+<div class="grid md:grid-cols-2 gap-6 my-8">
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <div class="text-sm font-semibold text-gray-500 mb-2">Core References</div>
+    <ul class="list-disc list-inside text-sm text-blue-700 space-y-1">
+      <li><a class="hover:underline" href="https://www.youtube.com/watch?v=EgXOaH-ZqfU" target="_blank">Video: RAG Overview #1</a></li>
+      <li><a class="hover:underline" href="https://www.youtube.com/watch?v=EE4pvOEAjXc" target="_blank">Video: RAG Overview #2</a></li>
+      <li><a class="hover:underline" href="https://github.com/OSU-NLP-Group/HippoRAG" target="_blank">HippoRAG (GitHub)</a></li>
+      <li><a class="hover:underline" href="https://github.com/campfirein/cipher" target="_blank">cipher (GitHub)</a></li>
+      <li><a class="hover:underline" href="https://medium.com/@techsachin/mmoa-rag-optimization-algorithm-to-improve-rag-via-multi-agent-reinforcement-learning-52b83e955f62" target="_blank">MMOA-RAG (overview)</a></li>
+      <li><a class="hover:underline" href="https://www.youtube.com/watch?v=LV0jRVXtx80" target="_blank">HiRAG (Video)</a></li>
+      <li><a class="hover:underline" href="https://ajithp.com/2025/02/02/optimizing-rag-multi-agent-reinforcement-learning-mmoa-rag/" target="_blank">MMOA-RAG (article)</a></li>
+      <li><a class="hover:underline" href="https://github.com/chenyiqun/MMOA-RAG" target="_blank">MMOA-RAG (GitHub)</a></li>
+      <li><a class="hover:underline" href="https://www.reddit.com/r/LocalLLaMA/comments/1dz1i9a/mycomind_daemon_advanced_mixtureofmemoryragagents/" target="_blank">Mixture-of-memory RAG agents (Reddit)</a></li>
+      <li><a class="hover:underline" href="https://www.linkedin.com/posts/techsachinkumar_mmoa-rag-optimization-algorithm-to-improve-activity-7290537276982370304-HTxG/" target="_blank">MMOA-RAG post (LinkedIn)</a></li>
+    </ul>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <div class="text-sm font-semibold text-gray-500 mb-2">Evaluation</div>
+    <ul class="list-disc list-inside text-sm text-blue-700 space-y-1">
+      <li><a class="hover:underline" href="https://www.youtube.com/watch?v=X0PwwfcGSHU" target="_blank">Evaluation video</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900">
+  <div class="font-medium">Agent Memory Overview (promote later)</div>
+  <p class="mt-1">Comparative overview of short/long-term memory, episodic/semantic/procedural, and architectures (Reactive/Deliberative/Hybrid, MCP, Super Memory MCP). This section may move into Concepts later.</p>
+</div>
+
+<div class="mt-6 text-sm text-gray-600">Contributions welcome: propose annotations or new references via GitHub issues/PRs.</div>
+

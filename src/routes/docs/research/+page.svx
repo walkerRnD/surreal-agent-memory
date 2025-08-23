@@ -1,0 +1,34 @@
+---
+title: Research Hub
+description: Curated references and comparative analyses informing Surreal Agent Memory design
+tags: [research, rag, graphrag]
+lastUpdated: 2025-08-23
+---
+
+<svelte:head>
+  <title>Research • Surreal Agent Memory</title>
+  <meta name="description" content="Curated references and comparative analyses informing Surreal Agent Memory design" />
+</svelte:head>
+
+# 🔬 Research Hub
+
+<p class="text-gray-600 leading-relaxed">We explore RAG architectures and agent memory models to inform our design and roadmap.</p>
+
+<div class="grid md:grid-cols-2 gap-6 my-8">
+  <a href="/docs/research/rag-reference" class="block bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="text-2xl">📚</div>
+    <h2 class="text-lg font-semibold mt-2">RAG Reference</h2>
+    <p class="text-sm text-gray-600 mt-1">Curated links to papers, repos, videos, and evaluation resources</p>
+  </a>
+
+  <a href="/docs/research/graphrag-variants" class="block bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="text-2xl">🧭</div>
+    <h2 class="text-lg font-semibold mt-2">GraphRAG Variants</h2>
+    <p class="text-sm text-gray-600 mt-1">Comparative analysis of Graph/Hierarchical/MA-RL approaches</p>
+  </a>
+</div>
+
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900">
+  Looking for the project status? See the <a href="/docs/roadmap" class="font-medium underline">Roadmap</a>.
+</div>
+

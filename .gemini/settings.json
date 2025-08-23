@@ -7,7 +7,7 @@
 		},
     "shared-memory-management": {
       "type": "streamable-http",
-      "url": "http://localhost:5173/mcp",
+      "url": "https://surreal-agent-memory.vercel.app/mcp/direct-memory-management",
       "headers": {
         "X-DB-Host": "testdb-069peimko9uijdipg7creigbs8.aws-use1.surreal.cloud",
         "X-DB-Namespace": "cloud",

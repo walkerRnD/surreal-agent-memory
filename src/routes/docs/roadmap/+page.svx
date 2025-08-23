@@ -1,0 +1,99 @@
+---
+title: Roadmap
+description: Current status and upcoming milestones for Surreal Agent Memory
+tags: [roadmap, status]
+lastUpdated: 2025-08-23
+---
+
+<svelte:head>
+  <title>Roadmap • Surreal Agent Memory</title>
+  <meta name="description" content="Current status and upcoming milestones for Surreal Agent Memory" />
+</svelte:head>
+
+# 🗺️ Roadmap
+
+<p class="text-gray-600 leading-relaxed">This page tracks where the project is now, what's actively in progress, and what's next.</p>
+
+<div class="grid lg:grid-cols-3 gap-6 my-8">
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <div class="text-sm font-semibold text-gray-500 mb-2">Current Stage</div>
+    <ul class="space-y-2 text-sm">
+      <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span> Direct Memory Management <span class="ml-2 text-xs text-green-600">current</span></li>
+      <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-yellow-500"></span> Simple RAG <span class="ml-2 text-xs text-yellow-600">in development</span></li>
+    </ul>
+    <div class="mt-3 text-xs text-gray-500">Surfaces: MCP server, HTTP server, CLI, and Web UI with Cytoscape.</div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <div class="text-sm font-semibold text-gray-500 mb-2">Database Support</div>
+    <ul class="space-y-2 text-sm">
+      <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span> SurrealDB <span class="ml-2 text-xs text-green-600">current</span></li>
+      <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Milvus <span class="ml-2 text-xs text-gray-500">planned</span></li>
+      <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Qdrant <span class="ml-2 text-xs text-gray-500">planned</span></li>
+    </ul>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <div class="text-sm font-semibold text-gray-500 mb-2">Timeline</div>
+    <div>
+      <div class="text-xs uppercase tracking-wide text-gray-500 mb-1">Now</div>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li>Polish Direct Memory Management demos and docs</li>
+        <li>Publish Roadmap and Research pages</li>
+        <li>Improve Graph UI exploration (Cytoscape)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+  <div class="grid md:grid-cols-2 gap-6">
+    <div>
+      <h2 class="text-lg font-semibold mb-3">MCP Modes</h2>
+      <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span> Direct Memory Management</li>
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Memory Manager Agent MCP <span class="ml-2 text-xs text-gray-500">planned</span></li>
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Workspace Librarian Agent <span class="ml-2 text-xs text-gray-500">planned</span></li>
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Aggregator <span class="ml-2 text-xs text-gray-500">planned</span></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold mb-3">Retrieval Architecture</h2>
+      <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span> Raw Read & Write</li>
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-yellow-500"></span> Simple RAG <span class="ml-2 text-xs text-yellow-600">in progress</span></li>
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Graph RAG <span class="ml-2 text-xs text-gray-500">planned</span></li>
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Hyper Graph RAG <span class="ml-2 text-xs text-gray-500">planned</span></li>
+        <li class="flex items-center gap-2"><span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-400"></span> Lazy Graph RAG <span class="ml-2 text-xs text-gray-500">planned</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6 my-8">
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <h3 class="text-lg font-semibold mb-2">Next</h3>
+    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+      <li>Simple RAG prototype and demo page</li>
+      <li>Expand MCP tools reference and examples</li>
+      <li>Config precedence demo (querystring > headers)</li>
+    </ul>
+  </div>
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <h3 class="text-lg font-semibold mb-2">Later</h3>
+    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+      <li>Graph RAG and variants exploration</li>
+      <li>Additional DB adapters (Milvus, Qdrant)</li>
+      <li>Benchmarks and evaluation suite</li>
+    </ul>
+  </div>
+</div>
+
+<div class="mt-8 flex items-center justify-between bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+  <div>
+    <div class="text-sm font-semibold text-gray-700">Contribute and Follow</div>
+    <p class="text-sm text-gray-600">Issues and discussions are welcome. Help shape priorities by filing use-cases or feedback.</p>
+  </div>
+  <a href="https://github.com/walkerRnD/surreal-agent-memory" target="_blank" class="inline-flex items-center gap-2 bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-black">GitHub ↗</a>
+</div>
+

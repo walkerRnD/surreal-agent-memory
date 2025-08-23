@@ -335,8 +335,34 @@
 
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <a
-          href="/knowledge-graph-forms"
+          href="/docs/roadmap"
           class="group bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg p-6 transition-all duration-200 hover:shadow-lg"
+        >
+          <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">
+            🗺️
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Roadmap</h3>
+          <p class="text-sm text-gray-600">
+            Current status and upcoming milestones for the project
+          </p>
+        </a>
+
+        <a
+          href="/docs/research"
+          class="group bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg p-6 transition-all duration-200 hover:shadow-lg"
+        >
+          <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">
+            🔬
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Research</h3>
+          <p class="text-sm text-gray-600">
+            RAG references and GraphRAG variants informing the design
+          </p>
+        </a>
+
+        <a
+          href="/knowledge-graph-forms"
+          class="group bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-lg p-6 transition-all duration-200 hover:shadow-lg"
         >
           <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">
             📝
@@ -350,7 +376,7 @@
 
         <a
           href="/test-knowledge-graph"
-          class="group bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg p-6 transition-all duration-200 hover:shadow-lg"
+          class="group bg-gradient-to-br from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 rounded-lg p-6 transition-all duration-200 hover:shadow-lg"
         >
           <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">
             🧪
@@ -359,32 +385,6 @@
           <p class="text-sm text-gray-600">
             Run comprehensive tests to verify system functionality and
             performance
-          </p>
-        </a>
-
-        <a
-          href="/debug-knowledge-graph"
-          class="group bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-lg p-6 transition-all duration-200 hover:shadow-lg"
-        >
-          <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">
-            🔍
-          </div>
-          <h3 class="font-semibold text-gray-900 mb-2">Debug Database</h3>
-          <p class="text-sm text-gray-600">
-            Inspect database state, query data, and troubleshoot issues
-          </p>
-        </a>
-
-        <a
-          href="/demo"
-          class="group bg-gradient-to-br from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 rounded-lg p-6 transition-all duration-200 hover:shadow-lg"
-        >
-          <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">
-            🎮
-          </div>
-          <h3 class="font-semibold text-gray-900 mb-2">Demo</h3>
-          <p class="text-sm text-gray-600">
-            Explore demo scenarios and example use cases
           </p>
         </a>
       </div>
