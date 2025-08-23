@@ -1,0 +1,155 @@
+---
+title: Agent Memory Overview
+description: Foundations of AI agent memory systems — taxonomy, architecture, strategies, and evaluation
+tags: [research, memory, taxonomy, architecture]
+lastUpdated: 2025-08-23
+---
+
+<svelte:head>
+  <title>Agent Memory Overview • Surreal Agent Memory</title>
+  <meta name="description" content="Foundations of AI agent memory systems — taxonomy, architecture, strategies, and evaluation" />
+</svelte:head>
+
+# 🧠 Agent Memory Overview
+
+<p class="text-gray-600 leading-relaxed">A concise and opinionated guide to the core ideas behind agent memory: why it matters beyond the context window, how to structure it, and how to evaluate it.</p>
+
+<div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-sm text-indigo-900 my-6">
+  Stateless LLMs behave like "digital goldfish". Agent memory turns reactive prompts into deliberative, context-aware systems that learn and persist across sessions.
+</div>
+
+## 1) Why memory (beyond context)
+
+- Context windows are linear and costly; information in the middle is often ignored ("lost in the middle")
+- Larger contexts ≠ better agents — you need intelligent filtering, retrieval, and forgetting
+- Memory enables: personalization, continuity, reduced repetition, and cumulative learning
+
+## 2) Cognitive taxonomy (practitioner-friendly)
+
+<div class="overflow-x-auto my-4">
+  <table class="min-w-full text-sm border border-gray-200 bg-white rounded-xl overflow-hidden">
+    <thead class="bg-gray-50 text-gray-700">
+      <tr>
+        <th class="text-left px-4 py-3 border-b">Type</th>
+        <th class="text-left px-4 py-3 border-b">Primary role</th>
+        <th class="text-left px-4 py-3 border-b">Key characteristics</th>
+        <th class="text-left px-4 py-3 border-b">Implementation examples</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y">
+      <tr>
+        <td class="px-4 py-3 font-medium">Short-term (working)</td>
+        <td class="px-4 py-3">Maintain conversational coherence in a single session</td>
+        <td class="px-4 py-3">Ephemeral, limited capacity</td>
+        <td class="px-4 py-3">Buffers, sliding windows, summaries</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Long-term</td>
+        <td class="px-4 py-3">Persist across sessions; personalization & learning</td>
+        <td class="px-4 py-3">Persistent, large</td>
+        <td class="px-4 py-3">Vector DBs, knowledge graphs, relational stores</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Episodic</td>
+        <td class="px-4 py-3">Recall past events with temporal context</td>
+        <td class="px-4 py-3">Time-indexed, autobiographical</td>
+        <td class="px-4 py-3">Event logs, embeddings of histories</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Semantic</td>
+        <td class="px-4 py-3">Store facts, concepts, rules</td>
+        <td class="px-4 py-3">Abstract, generalizable</td>
+        <td class="px-4 py-3">KBs, RAG over vector DBs, KG</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Procedural</td>
+        <td class="px-4 py-3">How-to skills and behaviors</td>
+        <td class="px-4 py-3">Implicit, automatic</td>
+        <td class="px-4 py-3">Model weights, code/policies, meta-prompting</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Associative</td>
+        <td class="px-4 py-3">Relationships that enable inference</td>
+        <td class="px-4 py-3">Graph/relational</td>
+        <td class="px-4 py-3">Knowledge graphs, GraphRAG</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## 3) Memory-driven agentic loop
+
+- Trigger → Plan → Tools → Memory → Output
+- Memory is updated continually (events, reflections, tool outputs)
+- Life cycle: Ingest → Extract & Consolidate → Retrieve → Forget (decay)
+
+## 4) Strategies compared
+
+<div class="overflow-x-auto my-4">
+  <table class="min-w-full text-sm border border-gray-200 bg-white rounded-xl overflow-hidden">
+    <thead class="bg-gray-50 text-gray-700">
+      <tr>
+        <th class="text-left px-4 py-3 border-b">Strategy</th>
+        <th class="text-left px-4 py-3 border-b">Mechanism</th>
+        <th class="text-left px-4 py-3 border-b">Pros</th>
+        <th class="text-left px-4 py-3 border-b">Cons</th>
+        <th class="text-left px-4 py-3 border-b">Best for</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y">
+      <tr>
+        <td class="px-4 py-3 font-medium">Naive RAG</td>
+        <td class="px-4 py-3">Single-step top-k retrieval</td>
+        <td class="px-4 py-3">Simple to implement</td>
+        <td class="px-4 py-3">Context pollution; brittle k</td>
+        <td class="px-4 py-3">Basic Q&A</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Agentic RAG</td>
+        <td class="px-4 py-3">Iterative, tool-augmented retrieval</td>
+        <td class="px-4 py-3">Holistic, more accurate</td>
+        <td class="px-4 py-3">More complex</td>
+        <td class="px-4 py-3">Multi-step tasks</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Event Sourcing</td>
+        <td class="px-4 py-3">Immutable event log</td>
+        <td class="px-4 py-3">Perfect episodic memory</td>
+        <td class="px-4 py-3">Query complexity</td>
+        <td class="px-4 py-3">Auditable systems</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 font-medium">Managed Memory</td>
+        <td class="px-4 py-3">LLM-extracted/consolidated facts</td>
+        <td class="px-4 py-3">Low ops; automation</td>
+        <td class="px-4 py-3">Less flexible</td>
+        <td class="px-4 py-3">Turnkey deployments</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## 5) Toolkit (datastores & frameworks)
+
+- Vector DBs (FAISS, Chroma, Pinecone), Knowledge Graphs (SurrealDB relations, Graph stacks)
+- Frameworks: LangChain/LangGraph; custom orchestrators; prompt/reflect loops
+- Non-traditional: Git + Markdown as a debuggable memory
+
+## 6) Evaluation signals
+
+- Functional: Task completion, error rate, cost/latency
+- Quality: Accuracy, faithfulness, hallucination rate
+- Conversational: Coherence across turns; satisfaction
+- Retrieval: Adaptive k and query rewriting outperform fixed k
+
+## 7) Practical guidance
+
+- Tiered memory (working vs. archival)
+- Periodic summarization; typed memory (facts vs. goals vs. interactions)
+- Dynamic forgetting/decay to avoid bloat
+- Multi-agent sharing with guardrails; RBAC, namespaces, encryption; prompt-injection defenses
+
+<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-900 my-6">
+  Takeaway: Treat memory as a first-class domain with schemas, life cycle, and tests — not just a bigger context window.
+</div>
+

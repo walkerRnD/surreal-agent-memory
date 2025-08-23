@@ -1,0 +1,62 @@
+---
+title: Memory Types
+description: A practitioner’s guide to semantic, episodic, procedural, and prospective memory in AI agents
+tags: [research, memory, taxonomy]
+lastUpdated: 2025-08-23
+---
+
+<svelte:head>
+  <title>Memory Types • Surreal Agent Memory</title>
+  <meta name="description" content="A practitioner’s guide to semantic, episodic, procedural, and prospective memory in AI agents" />
+</svelte:head>
+
+# 🧩 Memory Types
+
+<p class="text-gray-600 leading-relaxed">Human-inspired memory categories adapted for agent systems. Clear definitions, characteristics, and implementation hints.</p>
+
+<div class="grid md:grid-cols-2 gap-6 my-8">
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <h2 class="text-lg font-semibold">Semantic Memory</h2>
+    <p class="text-sm text-gray-600">Facts, concepts, and generalized knowledge.</p>
+    <ul class="list-disc list-inside text-sm text-gray-700 mt-2 space-y-1">
+      <li>Representations: Knowledge graphs; embeddings; structured DBs</li>
+      <li>Use cases: QA, NLU, reasoning, retrieval</li>
+      <li>Traits: Declarative, stable, generalizable</li>
+    </ul>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <h2 class="text-lg font-semibold">Episodic Memory</h2>
+    <p class="text-sm text-gray-600">Specific past events with time/place context.</p>
+    <ul class="list-disc list-inside text-sm text-gray-700 mt-2 space-y-1">
+      <li>Representations: Experience logs; memory networks; embeddings</li>
+      <li>Use cases: Dialogue continuity; personalization; robotics</li>
+      <li>Traits: Dynamic, autobiographical, decays</li>
+    </ul>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <h2 class="text-lg font-semibold">Procedural Memory</h2>
+    <p class="text-sm text-gray-600">How-to skills, rules, and learned behaviors.</p>
+    <ul class="list-disc list-inside text-sm text-gray-700 mt-2 space-y-1">
+      <li>Representations: Policies (RL), model weights, behavior trees</li>
+      <li>Use cases: Robotics, game AI, control systems</li>
+      <li>Traits: Implicit, improves with practice</li>
+    </ul>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <h2 class="text-lg font-semibold">Prospective Memory</h2>
+    <p class="text-sm text-gray-600">Future intentions and reminders.</p>
+    <ul class="list-disc list-inside text-sm text-gray-700 mt-2 space-y-1">
+      <li>Representations: Plans, triggers, temporal logic, attention</li>
+      <li>Use cases: Assistants, task management, scheduled actions</li>
+      <li>Traits: Future-oriented; requires monitoring</li>
+    </ul>
+  </div>
+</div>
+
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900">
+  In practice, agents blend these memory types. Build typed stores and retrieval paths for each.
+</div>
+
