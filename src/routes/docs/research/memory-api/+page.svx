@@ -1,0 +1,196 @@
+---
+title: Memory API Reference
+description: Comprehensive API endpoints for implementing different memory types in AI agents
+tags: [research, api, memory, endpoints]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>Memory API Reference • Surreal Agent Memory</title>
+  <meta name="description" content="Comprehensive API endpoints for implementing different memory types in AI agents" />
+</svelte:head>
+
+# 🔌 Memory API Reference
+
+<p class="text-gray-600 leading-relaxed">A complete API structure for implementing different memory types in AI agent systems. These endpoints provide the foundation for short-term, long-term, episodic, semantic, procedural, and associative memory operations.</p>
+
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-6 my-8">
+  <h2 class="text-lg font-semibold text-blue-900 mb-2">🎯 Implementation Guide</h2>
+  <p class="text-blue-800 text-sm">Each endpoint includes appropriate request/response schemas, authentication, rate limiting, and error handling. The actual implementation depends on your specific technology stack (vector DB choice, graph database, etc.).</p>
+</div>
+
+## 🧠 Short-term (Working) Memory
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Session Management
+Manage conversation sessions and memory buffers for active interactions.
+
+- **`POST /api/sessions`** - Create new session with memory buffer
+- **`GET /api/sessions/{session_id}`** - Retrieve session state
+- **`DELETE /api/sessions/{session_id}`** - Clear session memory
+- **`PATCH /api/sessions/{session_id}/context`** - Update conversation context
+
+### Buffer Operations
+Handle message buffering and context window management.
+
+- **`POST /api/sessions/{session_id}/messages`** - Add to conversation buffer
+- **`GET /api/sessions/{session_id}/messages`** - Get buffered messages
+- **`POST /api/sessions/{session_id}/summarize`** - Generate summary of current buffer
+- **`GET /api/sessions/{session_id}/window`** - Get sliding window of recent context
+
+</div>
+
+## 💾 Long-term Memory
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### User Profile & Persistence
+Store and manage persistent user memories across sessions.
+
+- **`POST /api/users/{user_id}/memory`** - Store long-term memory
+- **`GET /api/users/{user_id}/memory`** - Retrieve all user memories
+- **`PATCH /api/users/{user_id}/memory/{memory_id}`** - Update specific memory
+- **`DELETE /api/users/{user_id}/memory/{memory_id}`** - Remove memory
+
+### Vector Store Operations
+Handle embedding-based similarity search and storage.
+
+- **`POST /api/memory/vectors/embed`** - Create vector embeddings
+- **`POST /api/memory/vectors/search`** - Similarity search
+- **`POST /api/memory/vectors/upsert`** - Insert/update vectors
+- **`DELETE /api/memory/vectors/{vector_id}`** - Remove vector
+
+</div>
+
+## 📅 Episodic Memory
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Event Management
+Log and retrieve specific events with temporal context.
+
+- **`POST /api/episodes`** - Log new episode/event
+- **`GET /api/episodes`** - Query episodes (with time filters)
+- **`GET /api/episodes/{episode_id}`** - Get specific episode details
+- **`GET /api/episodes/timeline`** - Get chronological event sequence
+
+### Temporal Queries
+Time-aware search and replay capabilities.
+
+- **`GET /api/episodes/range?start={timestamp}&end={timestamp}`** - Time-range query
+- **`GET /api/episodes/search?query={text}&time_context={period}`** - Context-aware search
+- **`POST /api/episodes/replay`** - Replay sequence of events
+
+</div>
+
+## 🧩 Semantic Memory
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Knowledge Base
+Manage facts, concepts, and structured knowledge.
+
+- **`POST /api/knowledge/facts`** - Add fact/concept
+- **`GET /api/knowledge/facts`** - Retrieve facts
+- **`PUT /api/knowledge/facts/{fact_id}`** - Update fact
+- **`DELETE /api/knowledge/facts/{fact_id}`** - Remove fact
+
+### Concept Management
+Handle concept hierarchies and inference rules.
+
+- **`POST /api/knowledge/concepts`** - Define new concept
+- **`GET /api/knowledge/concepts/{concept_id}`** - Get concept details
+- **`GET /api/knowledge/concepts/hierarchy`** - Get concept taxonomy
+- **`POST /api/knowledge/rules`** - Add inference rules
+
+### RAG Operations
+Retrieval-Augmented Generation capabilities.
+
+- **`POST /api/knowledge/rag/index`** - Index documents for RAG
+- **`POST /api/knowledge/rag/query`** - Query with retrieval augmentation
+- **`GET /api/knowledge/rag/sources`** - Get knowledge sources
+
+</div>
+
+## ⚙️ Procedural Memory
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Skills & Behaviors
+Manage learned procedures and executable skills.
+
+- **`POST /api/procedures/skills`** - Register new skill/procedure
+- **`GET /api/procedures/skills`** - List available procedures
+- **`POST /api/procedures/execute/{skill_id}`** - Execute procedure
+- **`PATCH /api/procedures/skills/{skill_id}`** - Update procedure
+
+### Meta-prompting
+Handle behavioral policies and prompt templates.
+
+- **`POST /api/procedures/prompts`** - Store meta-prompt template
+- **`GET /api/procedures/prompts/{context}`** - Get context-specific prompts
+- **`POST /api/procedures/policies`** - Define behavioral policies
+- **`GET /api/procedures/policies/active`** - Get active policies
+
+</div>
+
+## 🕸️ Associative Memory
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Graph Operations
+Manage entity relationships and knowledge graphs.
+
+- **`POST /api/graph/nodes`** - Create entity node
+- **`POST /api/graph/edges`** - Create relationship
+- **`GET /api/graph/nodes/{node_id}/relations`** - Get node relationships
+- **`DELETE /api/graph/edges/{edge_id}`** - Remove relationship
+
+### Graph Queries
+Advanced graph traversal and analysis.
+
+- **`POST /api/graph/traverse`** - Graph traversal query
+- **`POST /api/graph/shortest-path`** - Find path between nodes
+- **`GET /api/graph/clusters`** - Get related entity clusters
+- **`POST /api/graph/inference`** - Run inference on graph
+
+### GraphRAG
+Graph-enhanced Retrieval-Augmented Generation.
+
+- **`POST /api/graph/rag/query`** - GraphRAG query
+- **`GET /api/graph/rag/context/{node_id}`** - Get contextual subgraph
+- **`POST /api/graph/rag/expand`** - Expand query with graph context
+
+</div>
+
+## 🔄 Cross-Memory Operations
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Unified Search
+Search and consolidate across all memory types.
+
+- **`POST /api/memory/search`** - Search across all memory types
+- **`POST /api/memory/consolidate`** - Consolidate memories across types
+- **`GET /api/memory/stats`** - Get memory usage statistics
+
+### Memory Sync
+Synchronization and migration utilities.
+
+- **`POST /api/memory/sync`** - Synchronize between memory stores
+- **`POST /api/memory/migrate`** - Migrate memory format/location
+- **`GET /api/memory/health`** - Check memory system health
+
+</div>
+
+<div class="bg-green-50 border border-green-200 rounded-xl p-6 my-8">
+  <h2 class="text-lg font-semibold text-green-900 mb-2">💡 Next Steps</h2>
+  <p class="text-green-800 text-sm mb-3">Ready to implement these memory systems? Consider these implementation priorities:</p>
+  <ul class="list-disc list-inside text-green-800 text-sm space-y-1">
+    <li><strong>Start with Short-term Memory:</strong> Session management and buffer operations</li>
+    <li><strong>Add Long-term Storage:</strong> User profiles and vector operations</li>
+    <li><strong>Implement Semantic Memory:</strong> Knowledge base and RAG capabilities</li>
+    <li><strong>Extend with Graph Memory:</strong> Associative relationships and GraphRAG</li>
+  </ul>
+</div>

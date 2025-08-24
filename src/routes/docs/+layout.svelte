@@ -49,6 +49,13 @@
             </li>
             <li>
               <a
+                href="/docs/research/memory-api"
+                class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
+                >Memory API Reference</a
+              >
+            </li>
+            <li>
+              <a
                 href="/docs/research/rag-reference"
                 class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
                 >RAG Reference</a
