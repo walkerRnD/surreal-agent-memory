@@ -27,8 +27,8 @@ add the following to your MCP client configuration:
         "X-DB-Host": "wss://<YOUR_SURREAL_DB_HOST>",
         "X-DB-Namespace": "cloud",
         "X-DB-Database": "shared_memory",
-        "X-DB-Username": "$SUR_DB_USERNAME",
-        "X-DB-Password": "$SUR_DB_PASSWORD"
+        "X-DB-Username": "<SUR_DB_USERNAME>",
+        "X-DB-Password": "<SUR_DB_PASSWORD>"
       }
     },
   }
@@ -47,7 +47,7 @@ alternatively, you can replace username and password with a token.
         "X-DB-Host": "wss://<YOUR_SURREAL_DB_HOST>",
         "X-DB-Namespace": "cloud",
         "X-DB-Database": "shared_memory",
-        "X-DB-Token": "$SUR_DB_TOKEN"
+        "X-DB-Token": "<SUR_DB_TOKEN>"
       }
     }
   }

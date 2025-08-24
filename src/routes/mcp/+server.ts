@@ -90,7 +90,7 @@ const handler = createMcpHandler(
 	},
 	{},
 	{
-		maxDuration: 5,
+		maxDuration: 60,
 		streamableHttpEndpoint: '/mcp',
 		verboseLogs: true,
 	},

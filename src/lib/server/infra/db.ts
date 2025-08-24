@@ -55,15 +55,17 @@ export async function closeDashboardDb(): Promise<void> {
 }
 
 export const createDbConnection = async (conf: SERVER_DB_CONF) => {
-  const { host, namespace, database, username, password } = conf;
+  const { host, namespace, database, username, password, token } = conf;
   const isEmbedded = host.startsWith("mem://") || host.startsWith("surrealkv://");
   const db = new Surreal(isEmbedded ? { engines: surrealdbNodeEngines() } : undefined);
   await db.connect(host, {
     namespace: namespace,
     database: database,
   });
-  await db.query(INIT_DB_QUERY);
-  if (isEmbedded) return db;
+  if (isEmbedded) {
+    await db.query(INIT_DB_QUERY);
+    return db;
+  };
   if (conf.token) {
     await db.authenticate(conf.token);
     return db;
@@ -75,5 +77,6 @@ export const createDbConnection = async (conf: SERVER_DB_CONF) => {
     username: username,
     password: password,
   });
+  await db.query(INIT_DB_QUERY);
   return db;
 };

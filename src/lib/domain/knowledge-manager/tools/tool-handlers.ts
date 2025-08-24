@@ -69,21 +69,8 @@ export type McpRequestContext = {
 };
 
 export function getDbConfigFromRequest(context?: McpRequestContext): SERVER_DB_CONF {
-  const headers = context?.headers || {};
-  let queryParams: URLSearchParams | undefined;
-  if (context?.request?.url) {
-    try {
-      const url = new URL(context.request.url);
-      queryParams = url.searchParams;
-    } catch (error) {
-      console.warn('Failed to parse request URL for query parameters:', error);
-    }
-  }
-
-  const getParam = (queryKey: string, headerKeys: string[]): string | undefined => {
-    if (queryParams?.has(queryKey)) {
-      return queryParams.get(queryKey) || undefined;
-    }
+  const headers = context?.requestInfo?.headers || {};
+  const getParam = (headerKeys: string[]): string | undefined => {
     for (const headerKey of headerKeys) {
       if (headers[headerKey]) {
         return headers[headerKey];
@@ -92,12 +79,12 @@ export function getDbConfigFromRequest(context?: McpRequestContext): SERVER_DB_C
     return undefined;
   };
 
-  const host = getParam('db-host', ['x-db-host', 'X-DB-Host']);
-  const namespace = getParam('db-namespace', ['x-db-namespace', 'X-DB-Namespace']);
-  const database = getParam('db-database', ['x-db-database', 'X-DB-Database']);
-  const username = getParam('db-username', ['x-db-username', 'X-DB-Username']);
-  const password = getParam('db-password', ['x-db-password', 'X-DB-Password']);
-  const token = getParam('db-token', ['x-db-token', 'X-DB-Token']);
+  const host = getParam(['x-db-host', 'X-DB-Host']);
+  const namespace = getParam(['x-db-namespace', 'X-DB-Namespace']);
+  const database = getParam(['x-db-database', 'X-DB-Database']);
+  const username = getParam(['x-db-username', 'X-DB-Username']);
+  const password = getParam(['x-db-password', 'X-DB-Password']);
+  const token = getParam(['x-db-token', 'X-DB-Token']);
 
   const isMemory = host?.startsWith('mem://');
   if (!ALLOW_MEMORY && isMemory) {
