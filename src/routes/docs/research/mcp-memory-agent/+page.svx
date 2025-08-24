@@ -1,0 +1,645 @@
+---
+title: MCP Memory Agent
+description: Semantic memory operations designed for LLM agents using Model Context Protocol
+tags: [research, mcp, memory, typescript, agent]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>MCP Memory Agent • Surreal Agent Memory</title>
+  <meta name="description" content="Semantic memory operations designed for LLM agents using Model Context Protocol" />
+</svelte:head>
+
+# 🤖 MCP Memory Agent
+
+<p class="text-gray-600 leading-relaxed">A comprehensive set of semantic memory operations designed specifically for LLM agents using the Model Context Protocol (MCP). These tools provide intuitive, natural language interfaces that map to how memory works conceptually.</p>
+
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-6 my-8">
+  <h2 class="text-lg font-semibold text-blue-900 mb-2">🎯 Key Principles</h2>
+  <p class="text-blue-800 text-sm">Unlike traditional REST APIs, these are <strong>semantic operations</strong> that an LLM can reason about. They hide implementation complexity and allow flexible, natural language parameters while enabling the LLM to reason about what it knows and how it knows it.</p>
+</div>
+
+## 🧠 Short-term (Working) Memory Tools
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Core Conversation Context Operations
+
+```typescript
+// Store important context from current conversation
+interface RememberContextParams {
+  content: string;
+  importance: number; // 1-10 scale
+}
+
+// Retrieve recent conversation context
+interface GetRecentContextParams {
+  last_n_turns?: number;
+}
+
+// Generate conversation summary
+interface SummarizeConversationParams {
+  // No parameters - summarizes current session
+}
+
+// Clear current conversation memory
+interface ClearConversationParams {
+  // No parameters - clears working memory
+}
+```
+
+**Example Usage:**
+```typescript
+// Remember something important from the conversation
+await mcp.call('remember_context', {
+  content: "User prefers TypeScript examples over JavaScript",
+  importance: 8
+});
+
+// Get recent context for decision making
+const context = await mcp.call('get_recent_context', {
+  last_n_turns: 5
+});
+```
+
+</div>
+
+## 💾 Long-term Memory Tools
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Persistent User Knowledge
+
+```typescript
+// Save user preferences by category
+interface SaveUserPreferenceParams {
+  category: string;
+  preference: string;
+}
+
+// Store facts about the user
+interface SaveUserFactParams {
+  fact: string;
+  tags?: string[];
+}
+
+// Recall information about the user
+interface RecallAboutUserParams {
+  query?: string; // Optional specific query
+}
+
+// Update user profile information
+interface UpdateUserProfileParams {
+  updates: Record<string, any>;
+}
+
+// Remove specific user facts
+interface ForgetUserFactParams {
+  fact_identifier: string;
+}
+```
+
+**Example Usage:**
+```typescript
+// Save user preferences
+await mcp.call('save_user_preference', {
+  category: "coding_style",
+  preference: "Always use TypeScript with strict mode enabled"
+});
+
+// Store facts about user
+await mcp.call('save_user_fact', {
+  fact: "Works as a senior developer at a fintech company",
+  tags: ["profession", "experience", "industry"]
+});
+
+// Recall user information
+const userInfo = await mcp.call('recall_about_user', {
+  query: "coding preferences"
+});
+```
+
+</div>
+
+## 📅 Episodic Memory Tools
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Event and Experience Tracking
+
+```typescript
+// Record events and experiences
+interface RecordEventParams {
+  event: string;
+  timestamp?: string;
+  participants?: string[];
+}
+
+// Recall specific events
+interface RecallEventParams {
+  query: string;
+  time_context?: string;
+}
+
+// Recall events in date range
+interface RecallEventsBetweenParams {
+  start_date: string;
+  end_date: string;
+}
+
+// Find when something happened
+interface WhatHappenedWhenParams {
+  activity_description: string;
+}
+
+// Recall conversation history
+interface RecallConversationHistoryParams {
+  topic?: string;
+  date_range?: string;
+}
+```
+
+**Example Usage:**
+```typescript
+// Record an important event
+await mcp.call('record_event', {
+  event: "Successfully deployed the new authentication system",
+  timestamp: "2025-08-24T14:30:00Z",
+  participants: ["user", "team_lead", "devops_engineer"]
+});
+
+// Recall past events
+const events = await mcp.call('recall_event', {
+  query: "deployment issues",
+  time_context: "last month"
+});
+```
+
+</div>
+
+## 🔗 Associative Memory Tools
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Connections and Relationships
+
+```typescript
+// Connect ideas and concepts
+interface ConnectIdeasParams {
+  idea1: string;
+  idea2: string;
+  relationship: string;
+}
+
+// Find connections for an entity
+interface FindConnectionsParams {
+  entity: string;
+  depth?: number; // How many degrees of separation
+}
+
+// Explore specific relationships
+interface ExploreRelationshipParams {
+  entity1: string;
+  entity2: string;
+}
+
+// Discover patterns in data
+interface DiscoverPatternsParams {
+  context: string;
+}
+
+// Build knowledge maps
+interface BuildKnowledgeMapParams {
+  topic: string;
+}
+
+// Find similar items
+interface FindSimilarParams {
+  reference: string;
+  limit?: number;
+}
+```
+
+**Example Usage:**
+```typescript
+// Connect related ideas
+await mcp.call('connect_ideas', {
+  idea1: "TypeScript",
+  idea2: "Type Safety",
+  relationship: "provides enhanced type safety compared to JavaScript"
+});
+
+// Find connections
+const connections = await mcp.call('find_connections', {
+  entity: "SurrealDB",
+  depth: 2
+});
+
+// Build knowledge map
+const knowledgeMap = await mcp.call('build_knowledge_map', {
+  topic: "Modern Web Development"
+});
+```
+
+</div>
+
+## 🎯 Unified Memory Operations
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Cross-Memory Intelligent Operations
+
+```typescript
+// Universal remember function
+interface RememberParams {
+  content: string;
+  memory_type?: "auto" | "working" | "long_term" | "episodic" | "semantic";
+}
+
+// Universal recall function
+interface RecallParams {
+  query: string;
+  context?: string;
+}
+
+// Search across all memory types
+interface SearchAllMemoriesParams {
+  query: string;
+  filters?: {
+    memory_types?: string[];
+    date_range?: { start: string; end: string };
+    importance_threshold?: number;
+    tags?: string[];
+  };
+}
+
+// Consolidate related memories
+interface ConsolidateMemoriesParams {
+  topic: string;
+}
+
+// Explain memory connections
+interface ExplainMemoryConnectionsParams {
+  query: string;
+}
+
+// Forget information
+interface ForgetParams {
+  identifier: string;
+  scope?: "specific" | "related" | "all";
+}
+```
+
+**Example Usage:**
+```typescript
+// Universal remember - automatically categorizes
+await mcp.call('remember', {
+  content: "User successfully implemented OAuth2 authentication using Supabase",
+  memory_type: "auto" // Will determine best memory type
+});
+
+// Universal recall
+const memories = await mcp.call('recall', {
+  query: "authentication implementation",
+  context: "recent projects"
+});
+
+// Search all memories with filters
+const searchResults = await mcp.call('search_all_memories', {
+  query: "database optimization",
+  filters: {
+    memory_types: ["semantic", "procedural"],
+    importance_threshold: 7,
+    tags: ["performance", "database"]
+  }
+});
+```
+
+</div>
+
+## 🤔 Memory Reflection Tools
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Meta-Cognitive Operations
+
+```typescript
+// Explore knowledge about topics
+interface WhatDoIKnowAboutParams {
+  topic: string;
+}
+
+// Trace knowledge sources
+interface HowDoIKnowParams {
+  fact: string;
+}
+
+// Find when information was learned
+interface WhenDidILearnParams {
+  information: string;
+}
+
+// Get memory statistics
+interface MemoryStatisticsParams {
+  // No parameters - returns overall stats
+}
+
+// Identify knowledge gaps
+interface FindKnowledgeGapsParams {
+  domain: string;
+}
+
+// Suggest related memories
+interface SuggestRelatedMemoriesParams {
+  current_context: string;
+}
+```
+
+**Example Usage:**
+```typescript
+// Explore knowledge
+const knowledge = await mcp.call('what_do_i_know_about', {
+  topic: "GraphRAG implementation"
+});
+
+// Trace knowledge source
+const source = await mcp.call('how_do_i_know', {
+  fact: "SurrealDB supports multi-model data"
+});
+
+// Get memory statistics
+const stats = await mcp.call('memory_statistics');
+
+// Find knowledge gaps
+const gaps = await mcp.call('find_knowledge_gaps', {
+  domain: "machine_learning"
+});
+```
+
+</div>
+
+## 📋 MCP Tool Definitions
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Complete MCP Tool Schema Examples
+
+Here are complete MCP tool definitions ready for implementation:
+
+```json
+{
+  "name": "remember",
+  "description": "Store information in the appropriate memory system. Automatically determines the best memory type based on content.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "string",
+        "description": "The information to remember"
+      },
+      "context": {
+        "type": "string",
+        "description": "Optional context to help categorize the memory"
+      },
+      "tags": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Optional tags for easier retrieval"
+      }
+    },
+    "required": ["content"]
+  }
+}
+```
+
+```json
+{
+  "name": "recall",
+  "description": "Retrieve relevant information from any memory system based on a natural language query",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "What you want to remember or know"
+      },
+      "memory_types": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["working", "long_term", "episodic", "semantic", "procedural", "associative"]
+        },
+        "description": "Optional: Specific memory types to search"
+      },
+      "context": {
+        "type": "string",
+        "description": "Optional context to refine the search"
+      }
+    },
+    "required": ["query"]
+  }
+}
+```
+
+```json
+{
+  "name": "record_event",
+  "description": "Record something that happened for future episodic recall",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "what_happened": {
+        "type": "string",
+        "description": "Natural description of the event"
+      },
+      "emotional_context": {
+        "type": "string",
+        "description": "Optional: How did it feel or what was the mood"
+      },
+      "participants": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Optional: Who was involved"
+      },
+      "timestamp": {
+        "type": "string",
+        "description": "Optional: When it happened (ISO 8601 format)"
+      }
+    },
+    "required": ["what_happened"]
+  }
+}
+```
+
+```json
+{
+  "name": "connect_ideas",
+  "description": "Create an association between two concepts, facts, or memories",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "first": {
+        "type": "string",
+        "description": "First idea or concept"
+      },
+      "second": {
+        "type": "string",
+        "description": "Second idea or concept"
+      },
+      "how_related": {
+        "type": "string",
+        "description": "Description of the relationship"
+      },
+      "strength": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "description": "Optional: Strength of the connection (0-1)"
+      }
+    },
+    "required": ["first", "second", "how_related"]
+  }
+}
+```
+
+</div>
+
+## 🚀 Implementation Benefits
+
+<div class="bg-green-50 border border-green-200 rounded-xl p-6 my-8">
+  <h3 class="text-lg font-semibold text-green-900 mb-3">Why This Approach Works</h3>
+  <ul class="text-green-800 text-sm space-y-2">
+    <li><strong>Intuitive for LLMs:</strong> Operations map to natural language concepts</li>
+    <li><strong>Flexible Parameters:</strong> Natural language descriptions instead of rigid schemas</li>
+    <li><strong>Semantic Operations:</strong> Focus on what to do, not how to do it</li>
+    <li><strong>Cross-Memory Intelligence:</strong> Unified operations across memory types</li>
+    <li><strong>Meta-Cognitive Awareness:</strong> LLM can reason about its own knowledge</li>
+    <li><strong>Implementation Agnostic:</strong> Works with any backend (vector DB, graph DB, etc.)</li>
+  </ul>
+</div>
+
+---
+
+<div class="text-center text-gray-500 text-sm mt-12">
+  <p>These semantic memory operations provide the foundation for truly intelligent AI agents that can learn, remember, and reason about their experiences.</p>
+</div>
+
+## 🧩 Semantic Memory Tools
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Knowledge and Facts Management
+
+```typescript
+// Learn new facts
+interface LearnFactParams {
+  fact: string;
+  domain: string;
+  confidence?: number; // 0-1 scale
+}
+
+// Define concepts and their relationships
+interface DefineConceptParams {
+  concept: string;
+  definition: string;
+  related_concepts?: string[];
+}
+
+// Look up factual information
+interface LookupFactParams {
+  query: string;
+}
+
+// Verify knowledge accuracy
+interface VerifyKnowledgeParams {
+  statement: string;
+}
+
+// Get related concepts
+interface GetRelatedConceptsParams {
+  concept: string;
+}
+
+// Explain concepts in detail
+interface ExplainConceptParams {
+  concept: string;
+}
+```
+
+**Example Usage:**
+```typescript
+// Learn a new fact
+await mcp.call('learn_fact', {
+  fact: "SurrealDB supports graph queries with GraphQL-like syntax",
+  domain: "database_technology",
+  confidence: 0.95
+});
+
+// Define a concept
+await mcp.call('define_concept', {
+  concept: "Model Context Protocol",
+  definition: "A protocol for connecting AI models with external tools and data sources",
+  related_concepts: ["LLM", "AI_agents", "tool_calling"]
+});
+```
+
+</div>
+
+## ⚙️ Procedural Memory Tools
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 my-6">
+
+### Skills and How-to Knowledge
+
+```typescript
+// Learn new procedures
+interface LearnProcedureParams {
+  task: string;
+  steps: string[];
+  prerequisites?: string[];
+}
+
+// Recall how to do something
+interface RecallHowToParams {
+  task: string;
+}
+
+// Add behavioral rules
+interface AddBehavioralRuleParams {
+  context: string;
+  rule: string;
+}
+
+// Get applicable rules for situations
+interface GetApplicableRulesParams {
+  situation: string;
+}
+
+// Update existing skills
+interface UpdateSkillParams {
+  skill_name: string;
+  improvements: string;
+}
+```
+
+**Example Usage:**
+```typescript
+// Learn a procedure
+await mcp.call('learn_procedure', {
+  task: "Deploy SvelteKit app to Vercel",
+  steps: [
+    "Build the application with npm run build",
+    "Configure vercel.json if needed",
+    "Run vercel deploy command",
+    "Verify deployment in browser"
+  ],
+  prerequisites: ["Node.js installed", "Vercel CLI configured"]
+});
+
+// Recall procedures
+const howTo = await mcp.call('recall_how_to', {
+  task: "database migration"
+});
+```
+
+</div>

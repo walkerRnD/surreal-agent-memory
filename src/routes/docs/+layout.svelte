@@ -56,6 +56,13 @@
             </li>
             <li>
               <a
+                href="/docs/research/mcp-memory-agent"
+                class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
+                >MCP Memory Agent</a
+              >
+            </li>
+            <li>
+              <a
                 href="/docs/research/rag-reference"
                 class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
                 >RAG Reference</a
