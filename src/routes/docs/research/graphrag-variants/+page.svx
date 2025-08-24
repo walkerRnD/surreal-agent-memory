@@ -2,7 +2,7 @@
 title: GraphRAG Variants
 description: Comparative analysis of GraphRAG, HiRAG (Knowledge/Thought), MMOA-RAG, and LazyGraphRAG
 tags: [research, graphrag, hierarchy, multi-agent]
-lastUpdated: 2025-08-23
+lastUpdated: 2025-08-24
 ---
 
 <svelte:head>
@@ -58,6 +58,12 @@ lastUpdated: 2025-08-23
     </tbody>
   </table>
 </div>
+
+## Deep dives
+- Architecture: /docs/research/graphrag-variants/architecture
+- Variants: /docs/research/graphrag-variants/variants
+- Evaluation: /docs/research/graphrag-variants/evaluation
+- Applications: /docs/research/graphrag-variants/applications
 
 <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-sm text-indigo-900">
   Future work: Add diagrams and link to examples/demos.

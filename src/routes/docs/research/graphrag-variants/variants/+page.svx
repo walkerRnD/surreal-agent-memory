@@ -1,0 +1,40 @@
+---
+title: GraphRAG Variants
+description: KG-based, Community-based, and Hybrid GraphRAG — pros, cons, and ideal use cases
+tags: [graphrag, variants, comparison]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>GraphRAG Variants • Surreal Agent Memory</title>
+  <meta name="description" content="KG-based, Community-based, and Hybrid GraphRAG — pros, cons, and ideal use cases" />
+</svelte:head>
+
+# 🧭 Variants Overview
+
+## KG-GraphRAG (Purist)
+- Retrieval: graph traversal only (triplets + sources)
+- Pros: best for multi-hop reasoning; verifiable; low hallucination
+- Cons: expensive upfront LLM extraction; rigid for dynamic data
+- Use when: static domains (legal, scientific), deep reasoning
+
+## Community-based GraphRAG
+- Add: community detection; hierarchical summaries
+- Retrieval: local (entities/edges) + global (semantic to summaries)
+- Pros: great for summarization; blends detail and global view
+- Cons: extra complexity; supernode bottlenecks possible
+- Use when: large diverse corpora, query-based summarization
+
+## Hybrid GraphRAG
+- Combine: vector index + knowledge graph
+- Retrieval: parallel semantic + structural; merge results
+- Pros: balanced coverage; 8%+ factual improvement vs pure vector
+- Cons: most complex; orchestration and tuning needed
+- Use when: enterprise knowledge bases; mixed query types
+
+## Lightweight/Incremental Variants
+- LightRAG, Fixed Entity Architecture, LazyGraphRAG
+- Goal: reduce upfront cost via incremental graphing or JIT expansion
+
+> Rule of thumb: Choose the simplest variant that answers your dominant query type well; add structure only as needed.
+

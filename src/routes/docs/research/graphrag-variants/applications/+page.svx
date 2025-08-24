@@ -1,0 +1,31 @@
+---
+title: Applications & Case Studies
+description: Where GraphRAG delivers impact — customer support, healthcare, finance, and workforce intelligence
+tags: [applications, case-studies]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>GraphRAG Applications • Surreal Agent Memory</title>
+  <meta name="description" content="Where GraphRAG delivers impact — customer support, healthcare, finance, and workforce intelligence" />
+</svelte:head>
+
+# 🚀 Applications & Case Studies
+
+## Customer Support (LinkedIn)
+- Graph of tickets and relations → faster navigation and synthesis
+- Impact: 28.6% reduction in median resolution time
+
+## Healthcare (Precina Health P3C)
+- Multi-hop reasoning across clinical + social data
+- Impact: 1% monthly HbA1C reduction; 12x faster than standard care
+
+## Financial Fraud (Amazon Bedrock KBs)
+- Path-finding across accounts/transactions to expose hidden patterns
+- Impact: improved accuracy detecting multi-hop schemes
+
+## Workforce Intelligence (NASA)
+- Find experts and knowledge paths; improve onboarding and mobility
+
+> Guidance: Deliver value as “faster/better answers” or “new insights via relationships,” not only retrieval quality.
+

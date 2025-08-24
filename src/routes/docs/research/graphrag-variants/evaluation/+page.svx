@@ -1,0 +1,148 @@
+---
+title: Evaluation & Benchmarks
+description: Practical, component-level evaluation of GraphRAG and RAG — metrics, frameworks, benchmarks, and CI tips
+tags: [evaluation, benchmarks, ragas, graphrag]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>GraphRAG Evaluation • Surreal Agent Memory</title>
+  <meta name="description" content="Practical, component-level evaluation of GraphRAG and RAG — metrics, frameworks, benchmarks, and CI tips" />
+</svelte:head>
+
+# 📏 Evaluation & Benchmarks
+
+A practical guide to measuring what matters for GraphRAG and vector RAG — with metrics that reflect grounding, reasoning, and cost.
+
+## What is GraphRAG? A Technical Introduction
+
+GraphRAG represents an advanced evolution of RAG that incorporates graph-structured data, such as knowledge graphs (KGs), to enhance information retrieval and response generation. Unlike baseline RAG systems that rely on vector search for semantic similarity, GraphRAG leverages the relational structure of graphs to retrieve and process information based on domain-specific relationships.
+
+This is achieved through a multi-phase process:
+- **Query processor**: identifying key entities in a query
+- **Retriever**: using graph traversal algorithms to find related nodes
+- **Organizer**: refining the retrieved data before it's sent to the LLM
+
+By modeling entities and their relationships, GraphRAG aims to overcome the limitations of traditional RAG on complex, relational data and prevent issues like "context poisoning" (when irrelevant context degrades response quality).
+
+## How to think about evaluation
+- Evaluate components separately, then end-to-end:
+  - Retriever: does it bring the right evidence? (Context precision/recall, Hit Rate, MRR)
+  - Generator: does it use the evidence correctly? (Faithfulness, Answer relevance, Correctness)
+- Report a composite score only after component health is clear.
+
+## Modern metrics (LLM-as-judge)
+- Faithfulness (groundedness): statements supported by retrieved context (no ground truth required)
+- Answer relevance: directly answers the user question (no ground truth required)
+- Context precision: signal-to-noise of retrieved chunks (no ground truth required)
+- Context recall: did we retrieve all required evidence? (requires ground truth)
+- Answer correctness: fact-level correctness vs. reference answer (requires ground truth)
+- Classic IR: Hit Rate (top-k contains relevant), MRR (rank of first relevant)
+
+| Metric | Evaluates | Ground truth |
+| --- | --- | --- |
+| Faithfulness | Generator grounding | No |
+| Answer relevance | Generator focus | No |
+| Context precision | Retriever signal-to-noise | No |
+| Context recall | Retriever completeness | Yes |
+| Hit Rate / MRR | Retriever ranking | Yes |
+| Answer correctness | Final factual accuracy | Yes |
+
+## Why classic overlap metrics fall short
+- ROUGE/BLEU/METEOR optimize word overlap, not factual grounding or reasoning chains.
+- Prefer faithfulness + relevance for generation, and precision/recall + ranking for retrieval.
+
+## Frameworks you can use
+
+### General RAG Evaluation
+- **RAGAS**: opinionated, RAG-first suite (faithfulness, relevance, precision/recall). Easy to automate; great for CI baselines.
+- **DeepEval**: test-runner mindset (Pytest-like) with broader metrics (hallucination, bias, summarization) incl. RAGAS metrics.
+- **LangSmith (LangChain)**: end-to-end eval + tracing; good for comparing app versions and prompts.
+- **LlamaIndex evaluators**: built-ins for faithfulness/relevancy, plus synthetic dataset tools.
+- **Also notable**: Promptfoo (config-first comparisons), TruLens (observability + feedback logging).
+
+### GraphRAG-Specific Frameworks
+- **Microsoft GraphRAG Library**: Python library providing a modular data pipeline for constructing knowledge graphs and implementing community-based summarization and querying. Requires careful prompt tuning and configuration via a settings.yaml file.
+- **Neo4j neo4j-graphrag Package**: Official first-party library for Neo4j offering an end-to-end workflow for building GraphRAG applications. Supports both vector retrieval and graph-based retrieval using Cypher queries, enabling side-by-side comparison.
+- **RAGChecker**: Advanced diagnostic framework providing fine-grained, claim-level entailment checking and metrics beyond the basics for deeper insights into RAG system performance.
+
+## Benchmarks and datasets
+
+### Synthetic Dataset Generation
+- **Bootstrap approach**: Use LlamaIndex or RAGAS testset tools to automatically generate question-answer pairs from your document corpus
+- **Human validation**: Introduce human-in-the-loop validation to review and refine a subset of the synthetic dataset, filtering out low-quality or redundant pairs
+- **Quality considerations**: The quality depends heavily on prompts used for generation; optimal number of QA pairs varies by domain
+
+### Public Datasets
+- **MTRAG**: Designed for conversational RAG systems with multi-turn dialogues, including intentionally unanswerable questions to test model boundaries
+- **FRAMES**: Focuses on factuality, retrieval, and reasoning with challenging multi-hop questions requiring integration from multiple documents, plus numerical/tabular/temporal reasoning
+- **RAGTruth**: Specifically targets hallucination with 18,000+ naturally generated responses, categorizing word-level hallucinations into four types (evident/subtle conflicts, evident/subtle baseless information)
+
+### GraphRAG-Specific Benchmarks
+- **GraphRAG-Bench**: Systematic evaluation framework with staged tasks from single-hop → multi-hop → summarization/creative generation, designed to investigate when and why GraphRAG outperforms traditional RAG
+- **Academic findings**: Research like "RAG vs. GraphRAG: A Systematic Evaluation" shows the methodologies are complementary, with traditional RAG better for single-hop questions and GraphRAG excelling at multi-hop reasoning and multi-faceted summaries
+
+## GraphRAG vs VectorRAG — strategic decision framework
+
+The choice between RAG and GraphRAG is not about universal superiority, but a strategic decision based on specific application needs. Traditional RAG remains the default, cost-effective, and scalable solution for most use cases, particularly those with simple queries and high throughput. GraphRAG is a premium, specialized solution for knowledge-intensive domains with complex, multi-hop questions where correctness, explainability, and multi-faceted summarization are paramount.
+
+### Performance and Cost Trade-offs
+
+| Task / Feature | VectorRAG | GraphRAG | Key Insights |
+| --- | --- | --- | --- |
+| Single-hop QA | **Better** | Worse | The overhead of building and traversing a knowledge graph is not beneficial for simple, direct queries |
+| Multi-hop reasoning | Struggles | **Better** | GraphRAG excels at connecting disparate pieces of information via structured graph traversal |
+| Faithfulness | Lower | **Higher** | The relational structure of a knowledge graph helps reduce hallucination by grounding answers in verifiable triplets |
+| Global summarization | Struggles | **Better** | GraphRAG's ability to identify and summarize communities allows broader, more coherent summaries |
+| Cost & speed | **Low / Fast** | High / Slower | Initial graph creation and maintenance are expensive and time-consuming, driven by numerous LLM calls |
+| Data updatability | **High** | Low | GraphRAG's architecture struggles with incremental updates, often requiring full re-indexing |
+
+### The Cost-to-Value Equation
+- **Traditional RAG**: Simple, fast, relatively inexpensive to set up
+- **GraphRAG**: Requires additional resource-intensive indexing phase; slow process with high volume of LLM calls
+- **Dynamic data challenge**: GraphRAG systems often require complete recomputation to incorporate new information, making them a "hard non-starter" for frequently changing data
+- **Best fit**: High-stakes, knowledge-intensive domains (medical, legal research) where correctness and explainability are paramount
+
+## Building a robust evaluation pipeline
+
+A robust evaluation pipeline is a prerequisite for deploying a reliable RAG system. Here's an end-to-end approach:
+
+### Step-by-step implementation
+1) **Start with synthetic data generation**: Use frameworks like LlamaIndex or the Ragas TestsetGenerator to create an initial, large-scale dataset of question-answer pairs from your document corpus. This provides a fast way to get a baseline evaluation.
+
+2) **Validate and refine**: Introduce human-in-the-loop validation to review and refine a subset of the synthetic dataset. This ensures dataset quality and helps filter out low-quality or redundant pairs.
+
+3) **Choose your framework**: Select an evaluation framework based on your project's goals:
+   - **Ragas**: Strong choice for RAG-specific metrics
+   - **DeepEval**: More comprehensive, unit-testing approach with Pytest integration
+   - **LangChain (LangSmith) and LlamaIndex**: Excellent built-in capabilities for self-contained evaluation loops
+
+4) **Run component-level evaluation**: Assess retrieval and generation separately, then compute a composite score.
+
+5) **Integrate with CI/CD**: Implement the chosen evaluation framework in your CI/CD pipeline to enable continuous, automated performance checks. This ensures any code changes, model updates, or parameter tweaks are immediately evaluated for regressions.
+
+6) **Monitor in production**: Use AI observability tools like TruLens to monitor the RAG system's performance in a live environment, providing valuable feedback for continuous iteration and improvement.
+
+## Reporting and operational guidance
+
+### Key reporting practices
+- **Align evaluation set**: Match your dominant query distribution and publish that distribution for transparency
+- **Comprehensive metrics**: Always report both retrieval and generation metrics; include citations and path lineage for traceability
+- **Cost tracking**: Monitor graph build tokens + storage vs generation-time savings to validate ROI
+- **Qualitative audits**: Show traversal paths and evidence chunks alongside answers for debugging and trust
+
+### The LLM-as-a-Judge paradigm
+The field has shifted from requiring extensive human-annotated "golden" datasets to using powerful LLMs as objective judges. This "no-reference" evaluation approach:
+- Enables scalable, automated assessment without pre-defined correct answers
+- Allows integration into CI/CD pipelines for continuous performance checks
+- Evaluates metrics like faithfulness and answer relevancy based solely on retrieved context and generated response
+- Has limitations: AI judges may struggle with subjective evaluations or unfamiliar content
+
+### Hybrid evaluation strategy
+The most effective approach combines:
+- **Automated LLM-as-judge** for scalable, continuous evaluation
+- **Human validation** for quality assurance and edge case detection
+- **Component-level analysis** to diagnose retriever vs generator issues
+- **Domain-specific benchmarks** tailored to your use case
+
+> **Strategic tip**: Keep a simple vector-only baseline around. If GraphRAG isn’t clearly better on your real queries, use the simpler, more cost-effective path. The future likely involves hybrid architectures that intelligently select the most appropriate retrieval method for each query.

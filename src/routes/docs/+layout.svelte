@@ -56,10 +56,77 @@
             </li>
             <li>
               <a
+                href="/docs/research/evaluation-datasets"
+                class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
+                >Evaluation Datasets</a
+              >
+              <ul class="ml-4 mt-1 space-y-1">
+                <li>
+                  <a
+                    href="/docs/research/evaluation-datasets/foundational"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Foundational Datasets</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/docs/research/evaluation-datasets/modern-benchmarks"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Modern Benchmarks</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/docs/research/evaluation-datasets/metrics"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Metrics & Methodology</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/docs/research/evaluation-datasets/challenges"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Challenges & Future</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a
                 href="/docs/research/graphrag-variants"
                 class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
                 >GraphRAG Variants</a
               >
+              <ul class="ml-4 mt-1 space-y-1">
+                <li>
+                  <a
+                    href="/docs/research/graphrag-variants/architecture"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Architecture</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/docs/research/graphrag-variants/variants"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Variants</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/docs/research/graphrag-variants/evaluation"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Evaluation</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/docs/research/graphrag-variants/applications"
+                    class="block px-3 py-1 rounded hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                    >Applications</a
+                  >
+                </li>
+              </ul>
             </li>
           </ul>
         </nav>

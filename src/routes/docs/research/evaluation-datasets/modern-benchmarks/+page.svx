@@ -1,0 +1,347 @@
+---
+title: Modern RAG Benchmarks
+description: Contemporary evaluation datasets including RAGBench, MRAG-Bench, GraphRAG-Bench, and specialized domain-specific benchmarks
+tags: [evaluation, benchmarks, ragbench, mrag-bench, graphrag-bench]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>Modern RAG Benchmarks • Surreal Agent Memory</title>
+  <meta name="description" content="Contemporary evaluation datasets including RAGBench, MRAG-Bench, GraphRAG-Bench, and specialized domain-specific benchmarks" />
+</svelte:head>
+
+# 🚀 Modern RAG Benchmarks
+
+<p class="text-gray-600 leading-relaxed">Contemporary benchmarks have evolved beyond simple question-answering to address industry needs, multimodal capabilities, and the unique challenges of GraphRAG systems.</p>
+
+## Industry-Focused Benchmarks
+
+### RAGBench
+
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
+  <div class="flex items-start gap-3">
+    <div class="bg-blue-100 rounded-lg p-2">
+      <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H3.862a2 2 0 01-1.995-1.858L1 7m3 4v6m4-6v6m4-6v6M5 7V4a1 1 0 011-1h8a1 1 0 011 1v3M9 4h2"/>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-blue-900 mb-2">Bridging Academia and Industry</div>
+      <p class="text-sm text-blue-800">Large-scale benchmark with 100,000 examples sourced from industry corpora like user manuals, providing realistic testbeds for production applications.</p>
+    </div>
+  </div>
+</div>
+
+**Key Innovations:**
+
+<div class="grid md:grid-cols-2 gap-4 my-4">
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <div class="font-medium text-gray-900 mb-2">📊 Explainable Labels</div>
+    <ul class="text-sm text-gray-600 space-y-1">
+      <li>• <strong>Relevance:</strong> Quality of retrieved context</li>
+      <li>• <strong>Utilization:</strong> How well LLM used the context</li>
+      <li>• <strong>Completeness:</strong> Coverage of query requirements</li>
+    </ul>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <div class="font-medium text-gray-900 mb-2">🎯 Diagnostic Feedback</div>
+    <ul class="text-sm text-gray-600 space-y-1">
+      <li>• Pinpoints specific failure modes</li>
+      <li>• Actionable insights for improvement</li>
+      <li>• Production-ready evaluation metrics</li>
+    </ul>
+  </div>
+</div>
+
+**Example Diagnostic Scenario:**
+A system might produce a correct answer but receive a low "utilization" score, indicating it relied on internal knowledge rather than retrieved context - a critical insight for RAG system optimization.
+
+<div class="bg-white border border-gray-200 rounded-lg p-4 my-4">
+  <div class="text-sm font-medium text-gray-700 mb-2">📊 Primary Metrics</div>
+  <div class="grid grid-cols-3 gap-4 text-sm">
+    <div>
+      <span class="font-medium">AUROC:</span> Area Under ROC Curve
+    </div>
+    <div>
+      <span class="font-medium">RMSE:</span> Root Mean Square Error
+    </div>
+    <div>
+      <span class="font-medium">Hallucination Prediction:</span> False claim detection
+    </div>
+  </div>
+</div>
+
+## Multimodal Evaluation
+
+### MRAG-Bench
+
+<div class="bg-green-50 border border-green-200 rounded-xl p-5 mb-6">
+  <div class="flex items-start gap-3">
+    <div class="bg-green-100 rounded-lg p-2">
+      <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-green-900 mb-2">The Multimodal Frontier</div>
+      <p class="text-sm text-green-800">Extends RAG evaluation into the multimodal domain, assessing Large Vision-Language Models (LVLMs) in their ability to retrieve and utilize visual information.</p>
+    </div>
+  </div>
+</div>
+
+**Dataset Specifications:**
+- **Scale**: 16,000+ images with 1,300+ human-annotated questions
+- **Scenarios**: Nine distinct evaluation scenarios
+- **Format**: Multiple-choice questions with visual context
+- **Focus**: Visual knowledge retrieval effectiveness
+
+**Key Finding:**
+Evaluations confirm that visually augmented knowledge is more helpful than textual knowledge for LVLMs, validating the importance of multimodal RAG approaches.
+
+<div class="bg-white border border-gray-200 rounded-lg p-4 my-4">
+  <div class="text-sm font-medium text-gray-700 mb-2">📊 Primary Metrics</div>
+  <div class="text-sm">
+    <span class="font-medium">Accuracy:</span> Correctness of multimodal question answering
+  </div>
+</div>
+
+## GraphRAG-Specific Benchmarks
+
+### GraphRAG-Bench
+
+<div class="bg-purple-50 border border-purple-200 rounded-xl p-5 mb-6">
+  <div class="flex items-start gap-3">
+    <div class="bg-purple-100 rounded-lg p-2">
+      <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M5 12V7a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H6a1 1 0 01-1-1zM5 5a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2V5z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-purple-900 mb-2">Systematic GraphRAG Evaluation</div>
+      <p class="text-sm text-purple-800">Investigates the critical question of when and in which scenarios graph structures provide measurable benefits for RAG systems.</p>
+    </div>
+  </div>
+</div>
+
+**Evaluation Framework:**
+
+<div class="grid md:grid-cols-2 gap-4 my-4">
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <div class="font-medium text-gray-900 mb-2">📈 Progressive Difficulty</div>
+    <ul class="text-sm text-gray-600 space-y-1">
+      <li>• Simple fact retrieval</li>
+      <li>• Complex reasoning tasks</li>
+      <li>• Creative generation challenges</li>
+      <li>• Contextual summarization</li>
+    </ul>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <div class="font-medium text-gray-900 mb-2">🏥 Domain Leaderboards</div>
+    <ul class="text-sm text-gray-600 space-y-1">
+      <li>• Literary/fictional content</li>
+      <li>• Medical/healthcare content</li>
+      <li>• Domain-specific performance tracking</li>
+    </ul>
+  </div>
+</div>
+
+**Four Key Evaluation Dimensions:**
+
+<div class="space-y-3 my-6">
+  <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+    <div>
+      <span class="font-medium text-blue-900">Fact Retrieval:</span>
+      <span class="text-sm text-blue-700 ml-2">Accuracy and ROUGE-L</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+    <div>
+      <span class="font-medium text-green-900">Complex Reasoning:</span>
+      <span class="text-sm text-green-700 ml-2">Accuracy and ROUGE-L</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 p-3 bg-orange-50 rounded-lg">
+    <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+    <div>
+      <span class="font-medium text-orange-900">Contextual Summarization:</span>
+      <span class="text-sm text-orange-700 ml-2">Accuracy and Coverage</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
+    <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+    <div>
+      <span class="font-medium text-purple-900">Creative Generation:</span>
+      <span class="text-sm text-purple-700 ml-2">Accuracy, Factual Score, and Coverage</span>
+    </div>
+  </div>
+</div>
+
+## Specialized Evaluation Datasets
+
+### Hallucination-Focused: RAGTruth
+
+<div class="bg-red-50 border border-red-200 rounded-xl p-5 mb-6">
+  <div class="flex items-start gap-3">
+    <div class="bg-red-100 rounded-lg p-2">
+      <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-red-900 mb-2">Word-Level Hallucination Analysis</div>
+      <p class="text-sm text-red-800">Large-scale dataset specifically designed for analyzing word-level hallucinations in RAG scenarios with meticulous annotation.</p>
+    </div>
+  </div>
+</div>
+
+**Dataset Characteristics:**
+- **Scale**: Nearly 18,000 naturally generated responses
+- **Sources**: Diverse LLMs with varied architectures
+- **Annotation**: Word-level hallucination intensity marking
+- **Categories**: Four types of hallucinations identified
+
+**Hallucination Categories:**
+1. **Evident Conflicts**: Clear contradictions with source material
+2. **Subtle Conflicts**: Nuanced inconsistencies requiring careful analysis
+3. **Evident Baseless Information**: Obviously unsupported claims
+4. **Subtle Baseless Information**: Plausible but ungrounded statements
+
+### Dynamic Evaluation: DRAGON
+
+<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5 mb-6">
+  <div class="flex items-start gap-3">
+    <div class="bg-yellow-100 rounded-lg p-2">
+      <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-900 mb-2">Dynamic RAG Benchmark On News</div>
+      <p class="text-sm text-yellow-800">First dynamic benchmark for evaluating RAG systems, built on regularly updated corpus to prevent overfitting and reflect real-world knowledge evolution.</p>
+    </div>
+  </div>
+</div>
+
+**Innovation Features:**
+- **Dynamic Corpus**: Regularly updated Russian news and public documents
+- **Realistic Usage**: Reflects actual information consumption patterns
+- **Overfitting Prevention**: Mitigates static dataset limitations
+- **Current Knowledge**: Always up-to-date information base
+
+**Strategic Importance:**
+Addresses the critical flaw of static benchmarks where models can overfit to fixed knowledge snapshots, leading to poor real-world performance as information evolves.
+
+## Conversational and Multi-Turn Evaluation
+
+### MTRAG
+
+<div class="bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-6">
+  <div class="flex items-start gap-3">
+    <div class="bg-indigo-100 rounded-lg p-2">
+      <svg class="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5zM15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-indigo-900 mb-2">Multi-Turn Conversational RAG</div>
+      <p class="text-sm text-indigo-800">Designed for conversational RAG systems with multi-turn dialogues, including intentionally unanswerable questions to test model boundaries.</p>
+    </div>
+  </div>
+</div>
+
+**Key Features:**
+- **Multi-Turn Dialogues**: Realistic conversation patterns
+- **Boundary Testing**: Intentionally unanswerable questions
+- **Context Management**: Evaluation of conversation state handling
+- **Practical Application**: Real-world chatbot scenario testing
+
+### FRAMES
+
+<div class="bg-teal-50 border border-teal-200 rounded-xl p-5 mb-6">
+  <div class="flex items-start gap-3">
+    <div class="bg-teal-100 rounded-lg p-2">
+      <svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z M4 5a2 2 0 012-2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="font-semibold text-teal-900 mb-2">Factuality, Retrieval, and Reasoning</div>
+      <p class="text-sm text-teal-800">Focuses on challenging multi-hop questions requiring integration from multiple documents, plus numerical, tabular, and temporal reasoning capabilities.</p>
+    </div>
+  </div>
+</div>
+
+**Reasoning Categories:**
+- **Multi-Hop Integration**: Cross-document information synthesis
+- **Numerical Reasoning**: Mathematical computation requirements
+- **Tabular Reasoning**: Structured data interpretation
+- **Temporal Reasoning**: Time-based logical inference
+
+## Benchmark Comparison Matrix
+
+<div class="overflow-x-auto my-8">
+  <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Benchmark</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Focus Area</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Scale</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Key Innovation</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Primary Use Case</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <tr>
+        <td class="px-4 py-3 text-sm font-medium text-gray-900">RAGBench</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Industry Applications</td>
+        <td class="px-4 py-3 text-sm text-gray-600">100k examples</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Explainable labels</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Production RAG systems</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 text-sm font-medium text-gray-900">MRAG-Bench</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Multimodal RAG</td>
+        <td class="px-4 py-3 text-sm text-gray-600">16k images, 1.3k questions</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Visual knowledge retrieval</td>
+        <td class="px-4 py-3 text-sm text-gray-600">LVLM evaluation</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 text-sm font-medium text-gray-900">GraphRAG-Bench</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Graph-based RAG</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Progressive difficulty</td>
+        <td class="px-4 py-3 text-sm text-gray-600">When graphs help</td>
+        <td class="px-4 py-3 text-sm text-gray-600">GraphRAG vs RAG comparison</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 text-sm font-medium text-gray-900">RAGTruth</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Hallucination Detection</td>
+        <td class="px-4 py-3 text-sm text-gray-600">18k responses</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Word-level annotation</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Trustworthiness evaluation</td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 text-sm font-medium text-gray-900">DRAGON</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Dynamic Evaluation</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Regularly updated</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Prevents overfitting</td>
+        <td class="px-4 py-3 text-sm text-gray-600">Real-world performance</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="bg-gray-50 border border-gray-200 rounded-xl p-4 mt-8">
+  <div class="text-sm font-medium text-gray-700 mb-2">🔗 Related Resources</div>
+  <div class="grid md:grid-cols-3 gap-4 text-sm">
+    <a href="/docs/research/evaluation-datasets/foundational" class="text-blue-600 hover:underline">← Foundational Datasets</a>
+    <a href="/docs/research/evaluation-datasets/metrics" class="text-blue-600 hover:underline">→ Evaluation Metrics & Methodology</a>
+    <a href="/docs/research/evaluation-datasets/challenges" class="text-blue-600 hover:underline">→ Challenges & Future Directions</a>
+  </div>
+</div>

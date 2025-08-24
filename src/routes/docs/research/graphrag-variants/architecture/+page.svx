@@ -1,0 +1,149 @@
+---
+title: GraphRAG Architecture
+description: Reference pipeline, routing logic, retrieval patterns, and pragmatic design trade-offs
+tags: [graphrag, architecture, pipeline]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>GraphRAG Architecture • Surreal Agent Memory</title>
+  <meta name="description" content="Reference pipeline, routing logic, retrieval patterns, and pragmatic design trade-offs" />
+</svelte:head>
+
+# 🏗️ GraphRAG Architecture
+
+A practitioner’s blueprint for moving from vector-only RAG to a hybrid, graph-aware system.
+
+## From VectorRAG to GraphRAG (mental model)
+- VectorRAG: chunks → embeddings → semantic similarity search → prompt
+  - Strengths: simple, fast for single-hop recall
+  - Limits: context fragmentation, weak multi-hop reasoning, low explainability
+- GraphRAG: entities + relations → knowledge graph → structure-aware retrieval → organized prompt
+  - Strengths: explicit relationships, multi-hop traversal, auditability
+  - Costs: upfront graph building, more moving parts
+
+## Reference pipeline (components)
+1) Ingest + Extraction
+- Chunk text; extract entities/relations (triplets) + source citations
+- Community detection: cluster related entities for global summarization
+- Optional: hierarchical summaries (local → community → global themes)
+
+2) Storage & Indices
+- Graph store (entities/relations), Vector store (chunks/notes), Full-text index
+- Co-exist for coverage and robust fallback; prevent "context poisoning"
+
+3) Query processing (the organizer)
+- NER + relation hints; intent/complexity detection (single-hop vs multi-hop)
+- Map query terms to graph anchors (nodes/edges)
+- Route: graph-first vs vector-first vs hybrid based on query complexity
+
+4) Retrieval (graph traversal algorithms)
+- Graph: k-hop neighborhoods, shortest/important paths, entity-centric fans
+- Hybrid: merge graph hits with vector top-k; de-duplicate; re-rank by salience
+- Adaptive scope to reduce noise and prevent irrelevant expansion
+
+5) Organization (refining retrieved data)
+- Prune, de-dup, compress; build structured context (facts, paths, community notes)
+- Include citations and path lineage for auditability
+- Token budgets per section to stay within LLM limits
+
+6) Generation
+- Constrain LLM to provided context; produce answer and/or new facts (optional)
+- Ground responses in verifiable triplets to reduce hallucination
+
+7) Feedback & Eval
+- Log retrieval/usage; compute faithfulness/relevance; feed into CI and prompts
+- Monitor for "context poisoning" and graph traversal effectiveness
+
+## Query typing and routing
+- Signals to route to graph vs vector vs hybrid:
+  - Entity count ≥ 2 or explicit relations → graph-first
+  - “Why/how/impact/depends on” → graph-first or hybrid
+  - Factoid/simple lookup → vector-first
+  - Low graph recall → fall back/augment with vector results
+- Keep a minimal vector-only baseline for sanity checks and regressions.
+
+## Retrieval patterns (use what the question needs)
+- Path discovery
+  - Shortest path between anchors; bounded length (e.g., ≤ 3 edges)
+- k-hop neighborhood
+  - Expand from anchors to k hops; filter by relation type and node degree
+- Entity-centric focus
+  - Pull properties, immediate relations, and supporting passages for a focal node
+- Community/global
+  - Use community summaries to provide global theme/context; cite summaries + sources
+- Hybrid union/interleave
+  - Union graph hits with vector top-k; re-rank by citation density, path relevance, and recency
+
+### Example Cypher snippets (Neo4j)
+```cypher
+// Shortest path between two anchors
+MATCH p = shortestPath(
+  (a:Entity {name: $source})-[:REL*..3]->(b:Entity {name: $target})
+)
+RETURN nodes(p) AS nodes, relationships(p) AS rels
+LIMIT 5;
+```
+```cypher
+// k-hop neighborhood with type filter
+MATCH (e:Entity)
+WHERE e.name IN $entities
+MATCH p = (e)-[:CAUSES|:PART_OF|:MENTIONS*1..2]-(n)
+RETURN e, n, p
+LIMIT 50;
+```
+```cypher
+// Attach text snippets for evidence
+MATCH (e:Entity {name: $anchor})-[:MENTIONS]->(chunk:Chunk)
+WITH e, chunk
+ORDER BY chunk.score DESC
+RETURN e, collect(chunk.text)[0..3] AS snippets;
+```
+
+## Context organization (make evidence usable)
+- Structure the prompt context explicitly:
+  - Facts: subject–relation–object triplets with citations
+  - Paths: entity chains with edge labels and distances
+  - Snippets: top 1–3 text passages per facet
+- Budgets: enforce token limits per section (e.g., 40% facts, 20% paths, 40% snippets)
+
+### Hybrid retrieval sketch
+```ts
+function retrieve(query) {
+  const graph = graphSearch(query);
+  let ctx = organize(graph);
+  if (ctx.recall < MIN_RECALL || ctx.tokens < MIN_FILL) {
+    const vec = vectorTopK(query);
+    ctx = mergeAndRerank(ctx, vec);
+  }
+  return ctx;
+}
+```
+
+## Design choices that matter
+- Ontology depth: flat vs layered types; affects precision/recall and maintenance
+- Index mix: graph + vector + full-text; choose defaults and fallbacks explicitly
+- Summarization: community/cluster summaries only when corpus warrants global views
+- Guardrails: always include citations and path lineage for auditability
+- Cost control: batch extraction, selective triplet sampling, caching, background recompute
+- Updates: incremental graph mutation where possible; schedule full rebuilds sparingly; version the index
+
+## Production frameworks and libraries
+- **Microsoft GraphRAG**: modular data pipeline for knowledge graphs with community-based summarization; requires careful prompt tuning via settings.yaml
+- **Neo4j neo4j-graphrag**: official first-party library supporting both vector and graph retrieval with Cypher queries; enables side-by-side comparison
+- **Custom hybrid**: build your own router that dynamically chooses vector vs graph based on query complexity
+
+## Cost and maintenance reality check
+- **High upfront cost**: graph construction involves many LLM calls for entity/relation extraction
+- **Slow indexing**: resource-intensive compared to simple vector embedding
+- **Update challenges**: often requires full graph recomputation for new/changed data
+- **"Hard non-starter"** for frequently changing data; better for stable knowledge domains
+- **Premium solution**: justified for high-stakes domains (medical, legal) where correctness and explainability are paramount
+
+## When (not) to use GraphRAG
+- **Best**: multi-hop reasoning, causal chains, dependency/impact analysis, global summarization
+- **Good**: mixed workloads with a hybrid (router) in front; knowledge-intensive domains
+- **Avoid**: simple FAQ/factoids where vector-only is faster/cheaper and equally accurate
+- **Avoid**: rapidly changing data where full re-indexing is prohibitive
+
+> Tip: Start thin. Prove value on a narrow ontology and a small graph. Add hybrid routing and community summaries only when they clearly improve faithfulness or multi-hop answer quality over vector-only baselines.
