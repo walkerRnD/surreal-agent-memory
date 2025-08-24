@@ -70,6 +70,13 @@
             </li>
             <li>
               <a
+                href="/docs/research/graph-algorithms"
+                class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
+                >Graph Algorithms</a
+              >
+            </li>
+            <li>
+              <a
                 href="/docs/research/evaluation-datasets"
                 class="block px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-gray-900"
                 >Evaluation Datasets</a

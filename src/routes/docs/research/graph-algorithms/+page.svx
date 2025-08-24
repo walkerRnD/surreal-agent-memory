@@ -1,0 +1,188 @@
+---
+title: Graph Algorithms Reference
+description: Comprehensive reference of graph algorithms for memory systems and knowledge graphs
+tags: [research, algorithms, graphs, pathfinding, centrality, community-detection]
+lastUpdated: 2025-08-24
+---
+
+<svelte:head>
+  <title>Graph Algorithms Reference • Surreal Agent Memory</title>
+  <meta name="description" content="Comprehensive reference of graph algorithms for memory systems and knowledge graphs" />
+</svelte:head>
+
+# 🔗 Graph Algorithms Reference
+
+<p class="text-gray-600 leading-relaxed">A comprehensive collection of graph algorithms relevant to agent memory systems, knowledge graphs, and graph-based RAG implementations. These algorithms form the foundation for advanced memory retrieval, relationship analysis, and knowledge discovery.</p>
+
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900 my-6">
+  <div class="font-medium">💡 Why Graph Algorithms Matter for Agent Memory</div>
+  <p class="mt-1">Graph algorithms enable sophisticated memory operations like finding related concepts, identifying important memories, discovering communities of related information, and predicting missing connections in knowledge graphs.</p>
+</div>
+
+## 🗺️ Pathfinding & Search
+
+<div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm my-6">
+  <div class="text-sm font-semibold text-gray-500 mb-3">Navigation & Discovery Algorithms</div>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Core Pathfinding</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Shortest Path</strong> - Find optimal routes between memories</li>
+        <li><strong>Single-Source Shortest Path</strong> - Explore from one memory to all others</li>
+        <li><strong>All Pairs Shortest Path</strong> - Complete distance matrix</li>
+        <li><strong>A* Shortest Path</strong> - Heuristic-guided pathfinding</li>
+        <li><strong>Yen's K Shortest Path</strong> - Multiple alternative routes</li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Graph Exploration</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Minimum Weight Spanning Tree</strong> - Essential connections</li>
+        <li><strong>K-Spanning Tree (MST)</strong> - Multiple spanning trees</li>
+        <li><strong>Random Walk</strong> - Stochastic memory traversal</li>
+        <li><strong>Breadth & Depth First Search</strong> - Systematic exploration</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## ⭐ Centrality & Importance
+
+<div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm my-6">
+  <div class="text-sm font-semibold text-gray-500 mb-3">Memory Importance & Influence Metrics</div>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Local Centrality</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Degree Centrality</strong> - Connection count importance</li>
+        <li><strong>Closeness Centrality</strong> - Average distance to all nodes</li>
+        <li><strong>Harmonic Centrality</strong> - Improved closeness measure</li>
+        <li><strong>Betweenness Centrality</strong> - Bridge/bottleneck detection</li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Global Influence</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>PageRank</strong> - Authority-based ranking</li>
+        <li><strong>Personalized PageRank</strong> - Context-specific importance</li>
+        <li><strong>ArticleRank</strong> - Citation-based importance</li>
+        <li><strong>Eigenvector Centrality</strong> - Influence of connections</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## 🏘️ Community Detection
+
+<div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm my-6">
+  <div class="text-sm font-semibold text-gray-500 mb-3">Memory Clustering & Group Discovery</div>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Structure Analysis</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Triangle Count</strong> - Local clustering measure</li>
+        <li><strong>Local Clustering Coefficient</strong> - Neighborhood density</li>
+        <li><strong>Connected Components</strong> - Separate memory islands</li>
+        <li><strong>Strongly Connected Components</strong> - Bidirectional clusters</li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Community Algorithms</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Label Propagation</strong> - Fast community detection</li>
+        <li><strong>Louvain Modularity</strong> - Hierarchical communities</li>
+        <li><strong>K-1 Coloring</strong> - Graph coloring for grouping</li>
+        <li><strong>Modularity Optimization</strong> - Quality-based clustering</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## 🔮 Link Prediction
+
+<div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm my-6">
+  <div class="text-sm font-semibold text-gray-500 mb-3">Missing Connection Discovery</div>
+  <div class="grid md:grid-cols-1 gap-4">
+    <div>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Adamic Adar</strong> - Weighted common neighbors prediction</li>
+        <li><strong>Common Neighbors</strong> - Shared connection analysis</li>
+        <li><strong>Preferential Attachment</strong> - Rich-get-richer prediction</li>
+        <li><strong>Resource Allocations</strong> - Flow-based link prediction</li>
+        <li><strong>Same Community Neighbors</strong> - Community-aware prediction</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## 📏 Similarity Measures
+
+<div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm my-6">
+  <div class="text-sm font-semibold text-gray-500 mb-3">Memory Similarity & Distance Metrics</div>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Distance Metrics</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Euclidean Distance</strong> - Geometric similarity</li>
+        <li><strong>Cosine Similarity</strong> - Angular similarity</li>
+        <li><strong>Pearson Similarity</strong> - Correlation-based similarity</li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-medium text-gray-900 mb-2">Graph-based Similarity</h4>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Node Similarity (Jaccard)</strong> - Neighborhood overlap</li>
+        <li><strong>Overlap Similarity</strong> - Set intersection measure</li>
+        <li><strong>Approximate KNN</strong> - Efficient nearest neighbors</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## 🧠 Embeddings
+
+<div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm my-6">
+  <div class="text-sm font-semibold text-gray-500 mb-3">Graph Neural Networks & Embeddings</div>
+  <div class="grid md:grid-cols-1 gap-4">
+    <div>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Node2Vec</strong> - Skip-gram based node embeddings</li>
+        <li><strong>Random Projections</strong> - Dimensionality reduction technique</li>
+        <li><strong>GraphSAGE</strong> - Inductive graph neural network</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## 🛠️ Auxiliary Functions
+
+<div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm my-6">
+  <div class="text-sm font-semibold text-gray-500 mb-3">Supporting Tools & Utilities</div>
+  <div class="grid md:grid-cols-1 gap-4">
+    <div>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li><strong>Random Graph Generation</strong> - Synthetic graph creation for testing</li>
+        <li><strong>Graph Export</strong> - Data interchange and visualization</li>
+        <li><strong>One Hot Encoding</strong> - Categorical data representation</li>
+        <li><strong>Distributions & Metrics</strong> - Statistical analysis tools</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## 🎯 Applications in Agent Memory
+
+<div class="bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-900 my-6">
+  <div class="font-medium">🚀 Practical Applications</div>
+  <ul class="mt-2 list-disc list-inside space-y-1">
+    <li><strong>Memory Retrieval:</strong> Use centrality algorithms to find the most important memories</li>
+    <li><strong>Knowledge Discovery:</strong> Apply community detection to find related concept clusters</li>
+    <li><strong>Memory Completion:</strong> Use link prediction to suggest missing connections</li>
+    <li><strong>Similarity Search:</strong> Employ embedding algorithms for semantic memory search</li>
+    <li><strong>Memory Navigation:</strong> Use pathfinding for memory traversal and exploration</li>
+  </ul>
+</div>
+
+<div class="mt-8 text-sm text-gray-600">
+  <p><strong>Next Steps:</strong> These algorithms can be implemented using graph databases like SurrealDB or specialized graph processing libraries. Consider starting with centrality measures for memory importance ranking and community detection for knowledge clustering.</p>
+</div>
