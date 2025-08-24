@@ -9,10 +9,11 @@
       "type": "streamable-http",
       "url": "https://surreal-agent-memory.vercel.app/mcp/direct-memory-management",
       "headers": {
-        "X-DB-Host": "testdb-069peimko9uijdipg7creigbs8.aws-use1.surreal.cloud",
+        "X-DB-Host": "$SUR_DB_HOST",
         "X-DB-Namespace": "cloud",
         "X-DB-Database": "shared_memory",
-        "X-DB-Token": "eyJhbGciOiJQUzI1NiIsImtpZCI6IjFkNmViYjAyLWM5ZjEtNDg4Zi1iNjhjLWNlMzMzMzU4YzgyOCIsInR5cCI6IkpXVCJ9.eyJhYyI6ImNsb3VkIiwiYXVkIjoiMDY5cGVpbWtvOXVpamRpcGc3Y3JlaWdiczgiLCJleHAiOjE3NTU2NTE5MjYsImlhdCI6MTc1NTY1MTg2NiwicmwiOlsiT3duZXIiXX0.BqzxZwXl61rbCUv18vYcPYXb6TCtcPEuoPqjmm2Q-GHKW8qqy2ds0azVBJHqPVRf5NLpwUd_GYmKauYyVH4p_JzirECmRMNAYDMmPG57kXsY90D7cG9oGzv_0I097KXHzqS54KDXHD6TWCPrxU0lcH3XNiYZ8CfefRHiF9enPCtUCLJglLE11VYMYACeEJ-KBI4cvF2YMrkLCBMhY1mEYrA02SK5FI3nWrTD2begngGpvmm7QXIv-iza76EQA9hNvIrMXluFZMXzZptnXVvAOddqXEAVV1n-OL1ha2-H3BBkEe-vzlzuYnGgU93Zio1l8BZwrb24Qu4TnSPjccJEUg"
+        "X-DB-Username": "$SUR_DB_USERNAME",
+        "X-DB-Password": "$SUR_DB_PASSWORD"
       },
       "alwaysAllow": [
         "create_entities_to_memory",

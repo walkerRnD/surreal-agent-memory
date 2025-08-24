@@ -11,34 +11,49 @@ A flexible **Model Context Protocol (MCP) server** for AI agent memory managemen
 
 Use directly with Claude Desktop or other MCP-compatible AI assistants:
 
+Create a new SurrealDB instance and database here --> https://surrealdb.com/
+
+
+
+
+add the following to your MCP client configuration:
 ```json
 {
   "mcpServers": {
-    "surreal-agent-memory": {
-      "command": "npx",
-      "args": ["-y", "surreal-agent-memory"],
-      "env": {
-        "DB_HOST": "surrealkv://data.db",
-        "DB_NAMESPACE": "local",
-        "DB_DATABASE": "persisted",
-        "DB_USERNAME": "root",
-        "DB_PASSWORD": "root"
-      },
-      "alwaysAllow": [
-        "create_entities",
-        "create_relations",
-        "delete_entities",
-        "add_observations",
-        "delete_observations",
-        "delete_relations",
-        "read_graph",
-        "search_nodes",
-        "open_nodes"
-      ]
+    "shared-memory-management": {
+      "type": "streamable-http",
+      "url": "https://surreal-agent-memory.vercel.app/mcp/direct-memory-management",
+      "headers": {
+        "X-DB-Host": "wss://<YOUR_SURREAL_DB_HOST>",
+        "X-DB-Namespace": "cloud",
+        "X-DB-Database": "shared_memory",
+        "X-DB-Username": "$SUR_DB_USERNAME",
+        "X-DB-Password": "$SUR_DB_PASSWORD"
+      }
+    },
+  }
+}
+```
+
+alternatively, you can replace username and password with a token.
+
+```json
+{
+  "mcpServers": {
+    "shared-memory-management": {
+      "type": "streamable-http",
+      "url": "https://surreal-agent-memory.vercel.app/mcp/direct-memory-management",
+      "headers": {
+        "X-DB-Host": "wss://<YOUR_SURREAL_DB_HOST>",
+        "X-DB-Namespace": "cloud",
+        "X-DB-Database": "shared_memory",
+        "X-DB-Token": "$SUR_DB_TOKEN"
+      }
     }
   }
 }
 ```
+
 
 ### As HTTP Server
 
@@ -46,7 +61,7 @@ Use directly with Claude Desktop or other MCP-compatible AI assistants:
 npx surreal-agent-memory --mode server --port 3000 --host surreal://data.db --namespace local --database persisted --username root --password root
 ```
 
-Then configure as streamable HTTP MCP server:
+Then configure as streamable HTTP MCP server locally:
 
 ```json
 {
@@ -54,28 +69,22 @@ Then configure as streamable HTTP MCP server:
     "surreal-agent-memory": {
       "type": "streamable-http",
       "url": "http://localhost:3000",
-      "alwaysAllow": ["create_entities", "create_relations", "delete_entities", "add_observations", "delete_observations", "delete_relations", "read_graph", "search_nodes", "open_nodes"]
-    }
-  }
-}
-```
-
-### MCP Quick Connect (Streamable HTTP with Headers)
-
-For fastest setup in tools like Claude Desktop, use the MCP HTTP endpoint with DB headers (as shown in [`.gemini/settings.json`](.gemini/settings.json:1)):
-
-```json
-{
-  "mcpServers": {
-    "memory": {
-      "type": "streamable-http",
-      "url": "http://localhost:5173/mcp",
       "headers": {
-        "X-DB-Host": "surrealkv://data.db",
+        "X-DB-Host": "surrealkv://~/shared-agent-memory.db",
         "X-DB-Namespace": "local",
-        "X-DB-Database": "persisted",
-        "X-DB-Token": "YOUR_SURREALDB_JWT"
-      }
+        "X-DB-Database": "persisted"
+      },
+      "alwaysAllow": [
+        "create_entities_to_memory",
+        "create_relations_to_memory",
+        "add_observations_to_memory",
+        "delete_entities_to_memory",
+        "delete_observations_to_memory",
+        "delete_relations_to_memory",
+        "read_graph_to_memory",
+        "search_nodes_to_memory",
+        "open_nodes_to_memory"
+      ]
     }
   }
 }
@@ -177,9 +186,6 @@ Descriptive information attached to entities, enabling rich context and searchab
 ### Environment Variables
 
 ```bash
-# Storage backend selection
-KNOWLEDGE_GRAPH_VERSION=v1  # Use SurrealDB (default)
-
 # SurrealDB Configuration
 DB_HOST=surrealkv://data.db
 DB_NAMESPACE=local
